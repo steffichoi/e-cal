@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="/Users/steffichoi/Documents/side/Me-Cal/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
+        <dex dex="/Users/steffichoi/Documents/side/Me-Cal/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_736e645823ee2fc466ca55c2df3fa1a1711975a6/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/steffichoi/Documents/git projects/e-cal/app/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="510aa6efc159983dfbffa676a0dae37568c0a46f">
+        <dex dex="/Users/steffichoi/Documents/git projects/e-cal/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run_59edfe1775b458ed7443946b476f2758e7b344bb/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/steffichoi/Documents/side/Me-Cal/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="65f041a38e4c6ee922ab6aab3f43a2813e2d462a">
+        <dex dex="/Users/steffichoi/Documents/side/Me-Cal/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_94f31a997f456a8c8c0e4ac841fe7a0ec0bf2127/classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="/Users/steffichoi/Documents/git projects/e-cal/app/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.3"
+        sha1="00f2bf9654255bdd8e9598e38f685a8c6a9f63cd">
+        <dex dex="/Users/steffichoi/Documents/git projects/e-cal/app/build/intermediates/transforms/dex/debug/folders/1000/10000/instant-run-bootstrap_b3181c547c770ad2a0d98981fc6c5f0ec71ef4b9/classes.dex" />
+    </item>
+
+</items>
