@@ -1,8 +1,5 @@
 package com.example.android.me_cal;
 
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -18,9 +15,12 @@ import com.example.android.me_cal.Fragments.ShoppingFragment;
 import com.example.android.me_cal.Fragments.ToDoFragment;
 import com.example.android.me_cal.Fragments.TodayFragment;
 import com.example.android.me_cal.Fragments.WeekFragment;
+import com.example.android.me_cal.Helper.HelperFunctions;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    HelperFunctions helperFunctions = new HelperFunctions(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +31,8 @@ public class MainActivity extends AppCompatActivity
 
         //Generate the calendar view as a fragment so it will be interchangable with
         //other fragments associated with the navigation actions
-        switchMainContentFragment(new CustomCalendarView());
-        switchSideContentFragment(new TodayFragment());
+        helperFunctions.switchMainContentFragment(new CustomCalendarView(), this);
+        helperFunctions.switchSideContentFragment(new TodayFragment(), this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -83,16 +83,16 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_today) {
-            switchMainContentFragment(new TodayFragment());
-            switchSideContentFragment(new ToDoFragment());
+            helperFunctions.switchMainContentFragment(new TodayFragment(), this);
+            helperFunctions.switchSideContentFragment(new ToDoFragment(), this);
         } else if (id == R.id.nav_week) {
-            switchMainContentFragment(new WeekFragment());
+            helperFunctions.switchMainContentFragment(new WeekFragment(), this);
         } else if (id == R.id.nav_month) {
-            switchMainContentFragment(new CustomCalendarView());
+            helperFunctions.switchMainContentFragment(new CustomCalendarView(), this);
         } else if (id == R.id.nav_to_do) {
-            switchMainContentFragment(new ToDoFragment());
+            helperFunctions.switchMainContentFragment(new ToDoFragment(), this);
         } else if (id == R.id.nav_shopping) {
-            switchMainContentFragment(new ShoppingFragment());
+            helperFunctions.switchMainContentFragment(new ShoppingFragment(), this);
         } else if (id == R.id.filter_fix_schedule) {
 
         } else if (id == R.id.filter_events) {
@@ -108,21 +108,21 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
-    private void switchMainContentFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        fragmentTransaction.replace(R.id.main_content_frame, fragment);
-
-        fragmentTransaction.commit();
-    }
-
-    private void switchSideContentFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-        fragmentTransaction.replace(R.id.side_content_frame, fragment);
-
-        fragmentTransaction.commit();
-    }
+//    private void switchMainContentFragment(Fragment fragment) {
+//        FragmentManager fragmentManager = getFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//        fragmentTransaction.replace(R.id.main_content_frame, fragment);
+//
+//        fragmentTransaction.commit();
+//    }
+//
+//    private void switchSideContentFragment(Fragment fragment) {
+//        FragmentManager fragmentManager = getFragmentManager();
+//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//
+//        fragmentTransaction.replace(R.id.side_content_frame, fragment);
+//
+//        fragmentTransaction.commit();
+//    }
 }

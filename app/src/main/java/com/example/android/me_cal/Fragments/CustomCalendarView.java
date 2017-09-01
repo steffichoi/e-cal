@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.CalendarView;
 
 import com.example.android.me_cal.R;
+import com.example.android.me_cal.Helper.HelperFunctions;
 
 /**
  * Created by steffichoi on 8/17/17.
@@ -22,6 +23,7 @@ public class CustomCalendarView extends Fragment {
     View myView;
     CalendarView calendarView;
     Long date;
+    HelperFunctions helperFunctions = new HelperFunctions(getActivity());
 
     @Nullable
     @Override
@@ -33,13 +35,7 @@ public class CustomCalendarView extends Fragment {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
-
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                fragmentTransaction.replace(R.id.main_content_frame, new TodayFragment());
-
-                fragmentTransaction.commit();
+                helperFunctions.switchMainContentFragment(new TodayFragment(), getActivity());
 
             }
         });
@@ -48,12 +44,7 @@ public class CustomCalendarView extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                fragmentTransaction.replace(R.id.main_content_frame, new AddTaskFragment());
-
-                fragmentTransaction.commit();
+                helperFunctions.switchMainContentFragment(new AddTaskFragment(), getActivity());
             }
         });
 

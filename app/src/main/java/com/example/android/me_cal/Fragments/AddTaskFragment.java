@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.example.android.me_cal.Helper.HelperFunctions;
 import com.example.android.me_cal.R;
 import com.example.android.me_cal.data.AddTaskDbHelper;
 
@@ -23,6 +24,7 @@ import java.util.Calendar;
 public class AddTaskFragment extends Fragment implements View.OnClickListener {
 
     View myView;
+    HelperFunctions helperFunctions = new HelperFunctions(getActivity());
 
     private static final String LOG_TAG = "class.getSimpleName()";
 
@@ -48,24 +50,20 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         switch(v.getId()){
 
             case R.id.save_fab:
 
                 addToSchedule();
-
-                fragmentTransaction.replace(R.id.main_content_frame, new TodayFragment());
-                fragmentTransaction.replace(R.id.side_content_frame, new ToDoFragment());
+                helperFunctions.switchMainContentFragment(new TodayFragment(), getActivity());
+                helperFunctions.switchSideContentFragment(new ToDoFragment(), getActivity());
                 break;
 
             case R.id.cancel_fab:
 
-                fragmentTransaction.replace(R.id.main_content_frame, new CustomCalendarView());
+                helperFunctions.switchMainContentFragment(new CustomCalendarView(), getActivity());
                 break;
         }
-        fragmentTransaction.commit();
 
     }
 
