@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,9 +40,20 @@ public class CustomCalendarView extends Fragment {
                 fragmentTransaction.replace(R.id.main_content_frame, new TodayFragment());
 
                 fragmentTransaction.commit();
-//                Toast.makeText(view.getContext(), "Year=" + year + " Month=" + month + " Day=" + dayOfMonth, Toast.LENGTH_LONG).show();
-                //cal.setBackgroundColor(Color.RED);
 
+            }
+        });
+
+        FloatingActionButton fab = (FloatingActionButton) myView.findViewById(R.id.add_fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                fragmentTransaction.replace(R.id.main_content_frame, new AddTaskFragment());
+
+                fragmentTransaction.commit();
             }
         });
 

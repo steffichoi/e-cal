@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity
         //Generate the calendar view as a fragment so it will be interchangable with
         //other fragments associated with the navigation actions
         switchMainContentFragment(new CustomCalendarView());
+        switchSideContentFragment(new TodayFragment());
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_today) {
             switchMainContentFragment(new TodayFragment());
+            switchSideContentFragment(new ToDoFragment());
         } else if (id == R.id.nav_week) {
             switchMainContentFragment(new WeekFragment());
         } else if (id == R.id.nav_month) {
