@@ -10,14 +10,21 @@
 
 
     <TextView
-        android:id="@+id/today_header_tv"
+        android:id="@+id/today_month_header_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TODAY"
-        android:textSize="20sp"
+        android:textSize="14sp"
         android:textStyle="bold"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp" />
+
+    <TextView
+        android:id="@+id/today_date_header_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:paddingBottom="8dp"/>
 
 
     <android.support.v7.widget.RecyclerView

@@ -13,7 +13,7 @@ import android.view.MenuItem;
 import com.example.android.me_cal.Fragments.CustomCalendarView;
 import com.example.android.me_cal.Fragments.ShoppingFragment;
 import com.example.android.me_cal.Fragments.ToDoFragment;
-import com.example.android.me_cal.Fragments.TodayFragment;
+import com.example.android.me_cal.Fragments.TodaySideBarFragment;
 import com.example.android.me_cal.Fragments.WeekFragment;
 import com.example.android.me_cal.Helper.HelperFunctions;
 
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity
         //Generate the calendar view as a fragment so it will be interchangable with
         //other fragments associated with the navigation actions
         helperFunctions.switchMainContentFragment(new CustomCalendarView(), this);
-        helperFunctions.switchSideContentFragment(new TodayFragment(), this);
+        helperFunctions.switchSideContentFragment(new TodaySideBarFragment(), this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_today) {
-            helperFunctions.switchMainContentFragment(new TodayFragment(), this);
+            helperFunctions.switchMainContentFragment(new TodaySideBarFragment(), this);
             helperFunctions.switchSideContentFragment(new ToDoFragment(), this);
         } else if (id == R.id.nav_week) {
             helperFunctions.switchMainContentFragment(new WeekFragment(), this);

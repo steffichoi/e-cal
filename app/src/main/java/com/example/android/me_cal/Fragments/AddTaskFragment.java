@@ -1,8 +1,6 @@
 package com.example.android.me_cal.Fragments;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -14,8 +12,6 @@ import android.widget.EditText;
 import com.example.android.me_cal.Helper.HelperFunctions;
 import com.example.android.me_cal.R;
 import com.example.android.me_cal.data.AddTaskDbHelper;
-
-import java.util.Calendar;
 
 /**
  * Created by steffichoi on 8/18/17.
@@ -55,7 +51,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
             case R.id.save_fab:
 
                 addToSchedule();
-                helperFunctions.switchMainContentFragment(new TodayFragment(), getActivity());
+                helperFunctions.switchMainContentFragment(new TodaySideBarFragment(), getActivity());
                 helperFunctions.switchSideContentFragment(new ToDoFragment(), getActivity());
                 break;
 
