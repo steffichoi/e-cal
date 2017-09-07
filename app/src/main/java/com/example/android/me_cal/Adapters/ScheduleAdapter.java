@@ -45,7 +45,6 @@ public class ScheduleAdapter extends RecyclerView.Adapter<ScheduleAdapter.Schedu
 
         holder.taskNameTextView.setText(taskName);
         holder.taskTimeTextView.setText(taskTime); //+ "   " + taskName);
-
     }
 
     @Override

@@ -51,7 +51,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
             case R.id.save_fab:
 
                 addToSchedule();
-                helperFunctions.switchMainContentFragment(new TodaySideBarFragment(), getActivity());
+                helperFunctions.switchMainContentFragment(new TodayFragment(), getActivity());
                 helperFunctions.switchSideContentFragment(new ToDoFragment(), getActivity());
                 break;
 

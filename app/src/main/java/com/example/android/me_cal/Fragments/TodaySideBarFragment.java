@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.icu.text.DateFormatSymbols;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.android.me_cal.Helper.HelperFunctions;
+import com.example.android.me_cal.Helper.HelperFunctionsFragment;
 import com.example.android.me_cal.data.AddTaskDbHelper;
 import com.example.android.me_cal.Adapters.ScheduleAdapter;
 import com.example.android.me_cal.R;
@@ -29,6 +32,8 @@ public class TodaySideBarFragment extends Fragment {
 
     private ScheduleAdapter mAdapter;
     private SQLiteDatabase mDb;
+
+    HelperFunctionsFragment helperFunctions = new HelperFunctionsFragment(getActivity(), this);
 
     @Nullable
     @Override
@@ -72,6 +77,32 @@ public class TodaySideBarFragment extends Fragment {
         mAdapter = new ScheduleAdapter(getActivity(), cursor);
 
         schedulerRecyclerView.setAdapter(mAdapter);
+
+        //         FLOATING ACTION BUTTON TO TODAY SCHEDULE
+        FloatingActionButton dateFab = (FloatingActionButton) myView.findViewById(R.id.date_fab);
+        String[] monthDate = helperFunctions.getMonthDate();
+
+        final String finalDateFromCal = monthDate[0];
+        final String finalMonthFromCal = monthDate[1];
+
+        dateFab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Fragment fragment = new TodayFragment();
+                Bundle bundle = new Bundle();
+
+                bundle.putString("date_from_cal", finalDateFromCal);
+                bundle.putString("month_from_cal", finalMonthFromCal);
+                fragment.setArguments(bundle);
+
+                helperFunctions.switchMainContentFragment(fragment, getActivity());
+                helperFunctions.switchSideContentFragment(new ToDoFragment(), getActivity());
+
+            }
+        });
+
+
         return myView;
     }
 }

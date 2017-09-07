@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity
             helperFunctions.switchMainContentFragment(new WeekFragment(), this);
         } else if (id == R.id.nav_month) {
             helperFunctions.switchMainContentFragment(new CustomCalendarView(), this);
+            helperFunctions.switchSideContentFragment(new TodaySideBarFragment(), this);
         } else if (id == R.id.nav_to_do) {
             helperFunctions.switchMainContentFragment(new ToDoFragment(), this);
         } else if (id == R.id.nav_shopping) {

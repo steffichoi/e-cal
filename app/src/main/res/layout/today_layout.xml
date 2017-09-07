@@ -8,12 +8,12 @@
     android:padding="@dimen/activity_horizontal_margin"
     tools:context="com.example.android.me_cal.MainActivity">
 
-
     <TextView
-        android:id="@+id/today_month_header_tv"
+        android:id="@+id/today_month_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="14sp"
+        android:text="MONTH"
+        android:textSize="20sp"
         android:textStyle="bold"
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="8dp" />
@@ -31,7 +31,7 @@
             app:backgroundTint="@color/colorPrimary" />
 
         <TextView
-            android:id="@+id/today_date_header_tv"
+            android:id="@+id/today_date_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -42,7 +42,6 @@
             android:textStyle="bold" />
 
     </FrameLayout>
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/today_recycler_view"
