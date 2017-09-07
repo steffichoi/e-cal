@@ -40,26 +40,7 @@ public class TodaySideBarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.today_side_bar_layout, container, false);
 
-        Calendar now = Calendar.getInstance();
-        int month = now.get(Calendar.MONTH);
-        int day = now.get(Calendar.DAY_OF_MONTH);
-
-        TextView today_month_label_tv;
-        TextView today_date_label_tv;
-        String dateFromCal = Integer.toString(day);
-        String monthFromCal = new DateFormatSymbols().getMonths()[month];;
-
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            dateFromCal = bundle.getString("date_from_cal", "no date");
-            monthFromCal = bundle.getString("month_from_cal", "no month");
-
-        }
-        today_month_label_tv = (TextView) myView.findViewById(R.id.today_month_header_tv);
-        today_date_label_tv = (TextView) myView.findViewById(R.id.today_date_header_tv);
-
-        today_date_label_tv.setText(dateFromCal);
-        today_month_label_tv.setText(monthFromCal);
+        helperFunctions.monthDateToTextView(myView, R.id.today_month_header_tv, R.id.today_date_header_tv);
 
         //RECYCLER VIEW STUFF
         RecyclerView schedulerRecyclerView;
@@ -80,10 +61,7 @@ public class TodaySideBarFragment extends Fragment {
 
         //         FLOATING ACTION BUTTON TO TODAY SCHEDULE
         FloatingActionButton dateFab = (FloatingActionButton) myView.findViewById(R.id.date_fab);
-        String[] monthDate = helperFunctions.getMonthDate();
-
-        final String finalDateFromCal = monthDate[0];
-        final String finalMonthFromCal = monthDate[1];
+        final int[] monthDate = helperFunctions.getDate();
 
         dateFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,17 +70,15 @@ public class TodaySideBarFragment extends Fragment {
                 Fragment fragment = new TodayFragment();
                 Bundle bundle = new Bundle();
 
-                bundle.putString("date_from_cal", finalDateFromCal);
-                bundle.putString("month_from_cal", finalMonthFromCal);
+                bundle.putInt("date_from_cal", monthDate[0]);
+                bundle.putInt("month_from_cal", monthDate[1]);
+                bundle.putInt("year_from_cal", monthDate[2]);
                 fragment.setArguments(bundle);
 
                 helperFunctions.switchMainContentFragment(fragment, getActivity());
                 helperFunctions.switchSideContentFragment(new ToDoFragment(), getActivity());
-
             }
         });
-
-
         return myView;
     }
 }

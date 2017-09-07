@@ -74,6 +74,18 @@ public class AddTaskDbHelper extends SQLiteOpenHelper{
         return cursor;
     }
 
+    public Cursor getDay(String taskDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + AddTaskEntry.TABLE_NAME + " WHERE "
+                + AddTaskEntry.COLUMN_TASK_DATE + "='" + taskDate + "'";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null) cursor.moveToFirst();
+
+        return cursor;
+    }
+
     public long addEvent(String name, String date, String time, String duration, String location) {
         SQLiteDatabase mDb = this.getWritableDatabase();
         ContentValues cv = new ContentValues();

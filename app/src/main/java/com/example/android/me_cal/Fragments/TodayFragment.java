@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.android.me_cal.data.AddTaskDbHelper;
 import com.example.android.me_cal.Adapters.TodayAdapter;
@@ -35,7 +36,7 @@ public class TodayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.today_layout, container, false);
 
-        helperFunctions.monthDateToTextView (myView, R.id.today_date_tv, R.id.today_month_tv);
+        helperFunctions.monthDateToTextView (myView, R.id.today_month_tv, R.id.today_date_tv);
 
         //RECYCLER VIEW STUFF
         RecyclerView schedulerRecyclerView;
@@ -47,7 +48,13 @@ public class TodayFragment extends Fragment {
         AddTaskDbHelper dbHelper = new AddTaskDbHelper(getActivity());
         mDb = dbHelper.getWritableDatabase();
 
-        Cursor cursor = dbHelper.getAllTasks();
+        int[] todayDate = helperFunctions.getDate();
+        String dateQuery = Integer.toString(todayDate[0]) + "/" +
+                Integer.toString(todayDate[1]+1) + "/" + Integer.toString(todayDate[2]);
+
+        Toast.makeText(myView.getContext(), "DATE QUERIED:" + dateQuery, Toast.LENGTH_LONG).show();
+
+        Cursor cursor = dbHelper.getDay(dateQuery);
 
         String[] timelist = {"10:00:00", "11:00:00", "12:00:00", "13:00:00", "14:00:00"};
         mAdapter = new TodayAdapter(getActivity(), cursor, timelist);

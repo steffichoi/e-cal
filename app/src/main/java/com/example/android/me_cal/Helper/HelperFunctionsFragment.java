@@ -29,20 +29,19 @@ public class HelperFunctionsFragment extends HelperFunctions{
         hFragment = fragment;
     }
 
-    public String[] getMonthDate() {
+    public int[] getDate() {
         Calendar now = Calendar.getInstance();
         int month = now.get(Calendar.MONTH);
         int day = now.get(Calendar.DAY_OF_MONTH);
-
-        String dateFromCal = Integer.toString(day);
-        String monthFromCal = new DateFormatSymbols().getMonths()[month];
+        int year = now.get(Calendar.YEAR);
 
         Bundle bundle = hFragment.getArguments();
         if (bundle != null) {
-            dateFromCal = bundle.getString("date_from_cal", "no date");
-            monthFromCal = bundle.getString("month_from_cal", "no month");
+            day = bundle.getInt("date_from_cal", 01);
+            month= bundle.getInt("month_from_cal", 01);
+            year= bundle.getInt("year_from_cal", 2000);
         }
-        String[] monthDate = {monthFromCal, dateFromCal};
+        int[] monthDate = {day, month, year};
         return monthDate;
     }
 
@@ -51,15 +50,15 @@ public class HelperFunctionsFragment extends HelperFunctions{
         TextView today_month_label_tv;
         TextView today_date_label_tv;
 
-        String[] monthDate = getMonthDate();
+        int[] monthDate = getDate();
 
-        String monthFromCal = monthDate[0];
-        String dateFromCal = monthDate[1];
+        String dateFromCal = Integer.toString(monthDate[0]);
+        String monthFromCal = new DateFormatSymbols().getMonths()[monthDate[1]];
 
         Bundle bundle = hFragment.getArguments();
         if (bundle != null) {
-            dateFromCal = bundle.getString("date_from_cal", "no date");
-            monthFromCal = bundle.getString("month_from_cal", "no month");
+            dateFromCal = Integer.toString(bundle.getInt("date_from_cal", 01));
+            monthFromCal = new DateFormatSymbols().getMonths()[bundle.getInt("month_from_cal", 01)];
 
         }
         today_month_label_tv = (TextView) view.findViewById(monthId);

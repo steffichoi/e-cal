@@ -21,7 +21,6 @@ public class CustomCalendarView extends Fragment {
 
     View myView;
     CalendarView calendarView;
-    Long date;
     HelperFunctions helperFunctions = new HelperFunctions(getActivity());
 
     @Nullable
@@ -38,15 +37,13 @@ public class CustomCalendarView extends Fragment {
                 Fragment newSideBarFragment = new TodaySideBarFragment();
                 Bundle bundle = new Bundle();
 
-                String monthFromCal = new DateFormatSymbols().getMonths()[month];;
-                String dateFromCal = Integer.toString(dayOfMonth);
+                bundle.putInt("date_from_cal", dayOfMonth);
+                bundle.putInt("month_from_cal", month);
+                bundle.putInt("year_from_cal", year);
 
-                bundle.putString("date_from_cal", dateFromCal);
-                bundle.putString("month_from_cal", monthFromCal);
                 newSideBarFragment.setArguments(bundle);
 
                 helperFunctions.switchSideContentFragment(newSideBarFragment, getActivity());
-
             }
         });
 
