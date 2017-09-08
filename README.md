@@ -12,9 +12,10 @@ IMPLEMENTED
 - view of activity details when one item in daily schedule is clicked on
 - daily schedule fragment can change based on date picked in side bar
 - need to implement the same functionality for today tasks in sidebar
+- swipe an item to delete
 
 NOT IMPLEMENTED
-- swipe an item to delete, a dialogue confirming action will pop up
+-  a dialogue confirming swipe item deletion pop up
 - to do list in side bar showing to do items for this date
 ->// add task button present? or click on time slot?
 

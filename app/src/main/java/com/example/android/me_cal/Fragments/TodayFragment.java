@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,11 +46,11 @@ public class TodayFragment extends Fragment {
         schedulerRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         //ADAPTER STUFF
-        AddTaskDbHelper dbHelper = new AddTaskDbHelper(getActivity());
+        final AddTaskDbHelper dbHelper = new AddTaskDbHelper(getActivity());
         mDb = dbHelper.getWritableDatabase();
 
         int[] todayDate = helperFunctions.getDate();
-        String dateQuery = Integer.toString(todayDate[0]) + "/" +
+        final String dateQuery = Integer.toString(todayDate[0]) + "/" +
                 Integer.toString(todayDate[1]+1) + "/" + Integer.toString(todayDate[2]);
 
         Cursor cursor = dbHelper.getDay(dateQuery);
@@ -58,6 +59,21 @@ public class TodayFragment extends Fragment {
         mAdapter = new TodayAdapter(getActivity(), cursor, timelist);
 
         schedulerRecyclerView.setAdapter(mAdapter);
+
+        new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
+                ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+                long id = (long) viewHolder.itemView.getTag();
+                dbHelper.removeGuest(id);
+                mAdapter.swapCursor(dbHelper.getDay(dateQuery));
+            }
+        }).attachToRecyclerView(schedulerRecyclerView);
 
         return myView;
     }

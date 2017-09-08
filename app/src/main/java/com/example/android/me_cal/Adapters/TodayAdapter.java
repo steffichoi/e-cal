@@ -77,6 +77,9 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
         holder.mTaskNameTv.setText(taskName);
         holder.mTaskTimeTv.setText(taskTime);
 
+        long id = mCursor.getLong(mCursor.getColumnIndex(AddTaskContract.AddTaskEntry._ID));
+        holder.itemView.setTag(id);
+
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -100,6 +103,16 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
                 fragmentTransaction.commit();
             }
         });
+    }
+
+    public void swapCursor(Cursor newCursor) {
+        // Always close the previous mCursor first
+        if (mCursor != null) mCursor.close();
+        mCursor = newCursor;
+        if (newCursor != null) {
+            // Force the RecyclerView to refresh
+            this.notifyDataSetChanged();
+        }
     }
 
     @Override

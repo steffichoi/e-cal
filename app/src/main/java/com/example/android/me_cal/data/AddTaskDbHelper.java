@@ -98,4 +98,10 @@ public class AddTaskDbHelper extends SQLiteOpenHelper{
 
         return mDb.insert(AddTaskEntry.TABLE_NAME, null, cv);
     }
+
+    public boolean removeGuest(long id) {
+        SQLiteDatabase mDb = this.getWritableDatabase();
+        return mDb.delete(AddTaskEntry.TABLE_NAME,
+                AddTaskEntry._ID + "=" + id, null) > 0;
+    }
 }
