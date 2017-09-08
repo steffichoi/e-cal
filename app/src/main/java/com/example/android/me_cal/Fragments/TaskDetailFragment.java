@@ -57,7 +57,7 @@ public class TaskDetailFragment extends Fragment {
 
         String monthDateFromDb = cursor.getString(cursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_DATE));
         String dateDb = monthDateFromDb.split("/")[0];
-        int monthDb = Integer.parseInt(monthDateFromDb.split("/")[1]);
+        int monthDb = Integer.parseInt(monthDateFromDb.split("/")[1])-1;
         String monthFin = new DateFormatSymbols().getMonths()[monthDb];;
 
 

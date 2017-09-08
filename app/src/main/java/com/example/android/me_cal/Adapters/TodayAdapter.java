@@ -32,19 +32,6 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
     private String taskName;
     private String taskTime;
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder {
-        public CardView mCardView;
-        public TextView mTaskTimeTv;
-        public TextView mTaskNameTv;
-        public MyViewHolder(View v) {
-            super(v);
-
-            mCardView = (CardView) v.findViewById(R.id.card_view);
-            mTaskTimeTv = (TextView) v.findViewById(R.id.task_time_tv);
-            mTaskNameTv = (TextView) v.findViewById(R.id.task_name_tv);
-        }
-    }
-
     // Provide a suitable constructor (depends on the kind of dataset)
     public TodayAdapter(Context context, Cursor cursor, String[] myDataset) {
         this.mContext = context;
@@ -56,10 +43,8 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
     @Override
     public TodayAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
                                                      int viewType) {
-        // create a new view
         View view = LayoutInflater.from(mContext)
                 .inflate(R.layout.today_card_item, parent, false);
-        // set the view's size, margins, paddings and layout parameters
         return new MyViewHolder(view);
     }
 
@@ -119,5 +104,18 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
     public int getItemCount() {
         // TODO: get rid of +1(for testing purposes)
         return mCursor.getCount()+1;
+    }
+
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+        public CardView mCardView;
+        public TextView mTaskTimeTv;
+        public TextView mTaskNameTv;
+        public MyViewHolder(View v) {
+            super(v);
+
+            mCardView = (CardView) v.findViewById(R.id.card_view);
+            mTaskTimeTv = (TextView) v.findViewById(R.id.task_time_tv);
+            mTaskNameTv = (TextView) v.findViewById(R.id.task_name_tv);
+        }
     }
 }

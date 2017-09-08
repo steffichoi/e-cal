@@ -13,6 +13,7 @@ IMPLEMENTED
 - daily schedule fragment can change based on date picked in side bar
 - need to implement the same functionality for today tasks in sidebar
 - swipe an item to delete, snackbar popup confirming action; allows user to undo action
+- view event detail from clicking on event in sidebar 
 
 NOT IMPLEMENTED
 - to do list in side bar showing to do items for this date
@@ -48,4 +49,4 @@ PART 2 stuff to do when done with basic functionalities
 
 
 NEED TO DO
-- get rid of shopping view
+- review code in adapters. should be able to condense

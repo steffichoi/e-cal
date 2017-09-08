@@ -3,7 +3,6 @@ package com.example.android.me_cal.Fragments;
 import android.app.Fragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.icu.text.DateFormatSymbols;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -12,15 +11,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
-import com.example.android.me_cal.Helper.HelperFunctions;
 import com.example.android.me_cal.Helper.HelperFunctionsFragment;
 import com.example.android.me_cal.data.AddTaskDbHelper;
-import com.example.android.me_cal.Adapters.ScheduleAdapter;
+import com.example.android.me_cal.Adapters.TodaySideBarAdapter;
 import com.example.android.me_cal.R;
-
-import java.util.Calendar;
 
 /**
  * Created by steffichoi on 8/17/17.
@@ -30,7 +25,7 @@ public class TodaySideBarFragment extends Fragment {
 
     View myView;
 
-    private ScheduleAdapter mAdapter;
+    private TodaySideBarAdapter mAdapter;
     private SQLiteDatabase mDb;
 
     HelperFunctionsFragment helperFunctions = new HelperFunctionsFragment(getActivity(), this);
@@ -59,7 +54,7 @@ public class TodaySideBarFragment extends Fragment {
 
         Cursor cursor = dbHelper.getDay(dateQuery);
 
-        mAdapter = new ScheduleAdapter(getActivity(), cursor);
+        mAdapter = new TodaySideBarAdapter(getActivity(), cursor);
 
         schedulerRecyclerView.setAdapter(mAdapter);
 
