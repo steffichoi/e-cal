@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -40,7 +41,7 @@ public class TodayFragment extends Fragment {
         helperFunctions.monthDateToTextView (myView, R.id.today_month_tv, R.id.today_date_tv);
 
         //RECYCLER VIEW STUFF
-        RecyclerView schedulerRecyclerView;
+        final RecyclerView schedulerRecyclerView;
 
         schedulerRecyclerView = (RecyclerView) myView.findViewById(R.id.today_recycler_view);
         schedulerRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -69,9 +70,28 @@ public class TodayFragment extends Fragment {
 
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-                long id = (long) viewHolder.itemView.getTag();
-                dbHelper.removeGuest(id);
-                mAdapter.swapCursor(dbHelper.getDay(dateQuery));
+                final long id = (long) viewHolder.itemView.getTag();
+                Snackbar snackbar = Snackbar
+                        .make(schedulerRecyclerView, "REMOVED TASK!", Snackbar.LENGTH_LONG)
+                        .setAction("UNDO", new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                // reload the tasks
+                                mAdapter.swapCursor(dbHelper.getDay(dateQuery));
+                            }
+                        })
+                        .setCallback(new Snackbar.Callback() {
+                            @Override
+                            public void onDismissed(Snackbar snackbar, int event) {
+                                super.onDismissed(snackbar, event);
+
+                                if (event != DISMISS_EVENT_ACTION) {
+                                    dbHelper.removeGuest(id);
+                                    mAdapter.swapCursor(dbHelper.getDay(dateQuery));
+                                }
+                            }
+                        });
+                snackbar.show();
             }
         }).attachToRecyclerView(schedulerRecyclerView);
 
