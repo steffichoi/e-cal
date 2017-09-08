@@ -53,7 +53,11 @@ public class TodaySideBarFragment extends Fragment {
         AddTaskDbHelper dbHelper = new AddTaskDbHelper(getActivity());
         mDb = dbHelper.getWritableDatabase();
 
-        Cursor cursor = dbHelper.getAllTasks();
+        int[] todayDate = helperFunctions.getDate();
+        String dateQuery = Integer.toString(todayDate[0]) + "/" +
+                Integer.toString(todayDate[1]+1) + "/" + Integer.toString(todayDate[2]);
+
+        Cursor cursor = dbHelper.getDay(dateQuery);
 
         mAdapter = new ScheduleAdapter(getActivity(), cursor);
 

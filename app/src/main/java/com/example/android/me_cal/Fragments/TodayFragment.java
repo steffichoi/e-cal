@@ -52,8 +52,6 @@ public class TodayFragment extends Fragment {
         String dateQuery = Integer.toString(todayDate[0]) + "/" +
                 Integer.toString(todayDate[1]+1) + "/" + Integer.toString(todayDate[2]);
 
-        Toast.makeText(myView.getContext(), "DATE QUERIED:" + dateQuery, Toast.LENGTH_LONG).show();
-
         Cursor cursor = dbHelper.getDay(dateQuery);
 
         String[] timelist = {"10:00:00", "11:00:00", "12:00:00", "13:00:00", "14:00:00"};
