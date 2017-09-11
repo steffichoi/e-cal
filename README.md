@@ -14,8 +14,13 @@ IMPLEMENTED
 - need to implement the same functionality for today tasks in sidebar
 - swipe an item to delete, snackbar popup confirming action; allows user to undo action
 - view event detail from clicking on event in sidebar 
+- date time picker for adding tasks with constraints on start and end time
+
+
 
 NOT IMPLEMENTED
+- location using googla maps api in add task fragment
+
 - to do list in side bar showing to do items for this date
 ->// add task button present? or click on time slot?
 
@@ -37,7 +42,7 @@ NOT IMPLEMENTED
 - view account details when user icon in drawer navigator is clicked on
 
 !!! IMPORTANT !!!
-- set up database in the cloud !!!
+- set up database in the cloud/server !!!
 
 PART 2 stuff to do when done with basic functionalities
 - incorporation of scheduler project
@@ -50,3 +55,7 @@ PART 2 stuff to do when done with basic functionalities
 
 NEED TO DO
 - review code in adapters. should be able to condense
+
+REQUEST:
+(enrico)
+when making an event, let me add other people in my contacts list to it and automatically send an email asking for their rsvp

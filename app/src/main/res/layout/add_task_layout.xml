@@ -1,74 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-
     <EditText
         android:id="@+id/event_name_edit_text"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/todayLayoutView"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
         android:hint="Event Name"
-        />
+        android:textSize="32sp" />
 
-    <EditText
-        android:id="@+id/event_date_edit_text"
-        android:layout_width="180dp"
+    <TextView
+        android:id="@+id/event_date_start_text_view"
+        android:layout_width="368dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/event_name_edit_text"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:hint="Event Date"
-         />
-    <EditText
-        android:id="@+id/event_time_edit_text"
-        android:layout_width="186dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/event_date_edit_text"
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:hint="Event Time"
-         />
-
-    <EditText
-        android:id="@+id/event_duration_edit_text"
-        android:layout_width="368dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_time_edit_text"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:hint="Event Duration"
+        android:layout_marginTop="10dp"
+        android:padding="8dp"
+        android:paddingBottom="12dp"
+        android:background="@color/colorPrimaryLight"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:text="Select Start Date"
         />
 
-    <EditText
-        android:id="@+id/event_type_edit_text"
+    <TextView
+        android:id="@+id/event_time_start_text_view"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/event_date_start_text_view"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_duration_edit_text"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:hint="Event Type"
+        android:layout_marginTop="1dp"
+        android:padding="8dp"
+        android:paddingBottom="12dp"
+        android:background="@color/colorPrimaryLight"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:text="Select Event Start Time"
         />
 
-    <EditText
-        android:id="@+id/event_reminder_edit_text"
+    <TextView
+        android:id="@+id/event_date_end_text_view"
         android:layout_width="368dp"
         android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/event_time_start_text_view"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_type_edit_text"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:hint="Event Duration"
+        android:layout_marginTop="10dp"
+        android:padding="8dp"
+        android:paddingBottom="12dp"
+        android:background="@color/colorPrimaryLight"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:text="Select End Date"
+        />
+
+    <TextView
+        android:id="@+id/event_time_end_text_view"
+        android:layout_width="368dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/event_date_end_text_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="10dp"
+        android:padding="8dp"
+        android:paddingBottom="12dp"
+        android:background="@color/colorPrimaryLight"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:text="Select Event End Time"
         />
 
     <EditText
@@ -76,10 +86,29 @@
         android:layout_width="368dp"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_reminder_edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/event_time_end_text_view"
         android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
         android:hint="Event Location"
+        />
+
+    <EditText
+        android:id="@+id/event_type_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_location_edit_text"
+        android:layout_marginStart="5dp"
+        android:hint="Event Type"
+        />
+
+    <EditText
+        android:id="@+id/event_reminder_edit_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/event_type_edit_text"
+        android:layout_marginStart="5dp"
+        android:hint="Event Duration"
         />
 
     <android.support.design.widget.FloatingActionButton
@@ -87,10 +116,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@+id/event_location_edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/event_reminder_edit_text"
         app:layout_constraintRight_toRightOf="parent"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
         android:src="@drawable/ic_done_white_24dp" />
 
     <android.support.design.widget.FloatingActionButton
@@ -98,12 +126,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@+id/event_location_edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/event_reminder_edit_text"
         app:layout_constraintRight_toLeftOf="@+id/save_fab"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="16dp"
         android:src="@drawable/ic_clear_white_24dp" />
-
-
 
 </android.support.constraint.ConstraintLayout>
