@@ -15,11 +15,10 @@ IMPLEMENTED
 - swipe an item to delete, snackbar popup confirming action; allows user to undo action
 - view event detail from clicking on event in sidebar 
 - date time picker for adding tasks with constraints on start and end time
-
+- location view in maps, on click location icon in add task fragment
 
 
 NOT IMPLEMENTED
-- location using googla maps api in add task fragment
 
 - to do list in side bar showing to do items for this date
 ->// add task button present? or click on time slot?
@@ -55,6 +54,7 @@ PART 2 stuff to do when done with basic functionalities
 
 NEED TO DO
 - review code in adapters. should be able to condense
+- use string resources to clean up code
 
 REQUEST:
 (enrico)

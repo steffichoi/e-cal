@@ -5,9 +5,11 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.text.DateFormatSymbols;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -46,6 +49,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
     private TextView mEventTimeStartTextView;
     private TextView mEventTimeEndTextView;
     private EditText mEventLocationEditText;
+    private ImageView mEventLocationImageView;
 
     private DatePickerDialog.OnDateSetListener mDateStartSetListener;
     private DatePickerDialog.OnDateSetListener mDateEndSetListener;
@@ -182,6 +186,9 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                 });
         mTimeEndSetListener = setTimeListener(mEventTimeEndTextView, mEventTimeEndTextView);
 
+        mEventLocationImageView = (ImageView) myView.findViewById(R.id.event_location_image_view);
+        mEventLocationImageView.setOnClickListener(this);
+
         mSaveFab = (FloatingActionButton) myView.findViewById(R.id.save_fab);
         mSaveFab.setOnClickListener(this);
 
@@ -210,6 +217,17 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
             case R.id.cancel_fab:
 
                 fragmentTransaction.replace(R.id.main_content_frame, new CustomCalendarView());
+                break;
+
+            case R.id.event_location_image_view:
+                mEventLocationEditText = (EditText) myView.findViewById(R.id.event_location_edit_text);
+                String address = mEventLocationEditText.getText().toString();
+
+                if (address.equals("")) {
+                    Toast.makeText(getActivity(), "No address entered!", Toast.LENGTH_SHORT).show();
+                } else {
+                    openLocationInMap(address);
+                }
                 break;
         }
         fragmentTransaction.commit();
@@ -310,5 +328,21 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                 endTv.setText(hourString + ":" + minString);
             }
         };
+    }
+
+    private void openLocationInMap(String address) {
+
+        Toast.makeText(getActivity(), address, Toast.LENGTH_LONG).show();
+        Uri geoLocation = Uri.parse("geo:0,0?q=" + address);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(geoLocation);
+
+        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivity(intent);
+        } else {
+            Toast.makeText(getActivity(), "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!",
+                    Toast.LENGTH_LONG);
+        }
     }
 }
