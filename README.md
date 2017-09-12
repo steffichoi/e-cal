@@ -16,9 +16,14 @@ IMPLEMENTED
 - view event detail from clicking on event in sidebar 
 - date time picker for adding tasks with constraints on start and end time
 - location view in maps, on click location icon in add task fragment
+- spinner for add item type and set reminder
+- added custom reminder option
 
 
 NOT IMPLEMENTED
+- need to constrain values being inputed into add task frgment and custom reminder
+- reconfigure db to take long time and additional fields
+- set reminder
 
 - to do list in side bar showing to do items for this date
 ->// add task button present? or click on time slot?
