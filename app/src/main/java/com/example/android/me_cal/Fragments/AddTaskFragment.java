@@ -120,10 +120,14 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     String reminder_choice = mEventReminderSpinner.getSelectedItem().toString();
                     if (reminder_choice.equals("Custom")){
-                        Toast.makeText(getActivity(), "Custom chosen", Toast.LENGTH_SHORT).show();
-                        getViews();
+                        if (eventNotSet()) {
+                            Toast.makeText(getActivity(),
+                                    "PICK EVENT START AND END TIMES \n" +
+                                            "BEFORE SETTING CUSTOM REMINDER", Toast.LENGTH_LONG).show();
+                            return;
+                        }
 
-                        Fragment customFragment =  new CustomReminderFragment();
+                        Fragment customFragment = new CustomReminderFragment();
                         Bundle bundle = new Bundle();
 
                         String name = mEventNameEditText.getText().toString();
@@ -147,6 +151,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                         customFragment.setArguments(bundle);
 
                         helperFunctions.switchSideContentFragment(customFragment, getActivity());
+
                     }
                 }
 
@@ -282,21 +287,20 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
 
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         switch(v.getId()){
 
             case R.id.save_fab:
 
                 addToSchedule();
 
-                fragmentTransaction.replace(R.id.main_content_frame, new TodaySideBarFragment());
-                fragmentTransaction.replace(R.id.side_content_frame, new ToDoFragment());
+                helperFunctions.switchMainContentFragment(new TodayFragment(), getActivity());
+                helperFunctions.switchSideContentFragment(new ToDoFragment(), getActivity());
                 break;
 
             case R.id.cancel_fab:
 
-                fragmentTransaction.replace(R.id.main_content_frame, new CustomCalendarView());
+                helperFunctions.switchMainContentFragment(new CustomCalendarView(), getActivity());
+                helperFunctions.switchSideContentFragment(new TodaySideBarFragment(), getActivity());
                 break;
 
             case R.id.event_location_image_view:
@@ -310,7 +314,6 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
         }
-        fragmentTransaction.commit();
 
     }
 
@@ -448,5 +451,15 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
         adapter.setDropDownViewResource(R.layout.spinner_dropdown_item_layout);
         spinner.setAdapter(adapter);
         return adapter;
+    }
+
+    private boolean eventNotSet() {
+        if (mEventDateStartTextView.getText().equals("Select Start Date") ||
+                mEventTimeStartTextView.getText().equals("Select Event Start Time") ||
+                mEventDateEndTextView.getText().toString().equals("Select End Date") ||
+            mEventTimeEndTextView.getText().equals("Select Event End Time")) {
+            return true;
+        }
+        return false;
     }
 }

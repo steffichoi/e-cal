@@ -19,74 +19,45 @@
         android:textColor="@color/colorPrimaryDark"
         />
 
-    <EditText
-        android:id="@+id/custom_reminder_min_edit_text"
-        android:layout_width="50dp"
-        android:layout_height="0dp"
-        app:layout_constraintLeft_toLeftOf="parent"
+    <TextView
+        android:id="@+id/custom_reminder_date_text_view"
+        android:layout_width="110dp"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/custom_reminder_header_text_view"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="5dp"
-        android:textSize="18dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@+id/custom_reminder_min_edit_text"
-        app:layout_constraintBottom_toBottomOf="@+id/custom_reminder_min_edit_text"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="10dp"
-        android:text="mins"
-        android:textSize="18dp"/>
-
-    <EditText
-        android:id="@+id/custom_reminder_hour_edit_text"
-        android:layout_width="50dp"
-        android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/custom_reminder_min_edit_text"
-        android:layout_marginTop="8dp"
         android:layout_marginStart="5dp"
-        android:textSize="18dp"/>
+        android:layout_marginTop="10dp"
+        android:padding="8dp"
+        android:paddingBottom="12dp"
+        android:background="@color/colorPrimaryLight"
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        android:text="Select Reminder Date"
+        />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/custom_reminder_time_text_view"
+        android:layout_width="110dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@+id/custom_reminder_hour_edit_text"
-        app:layout_constraintBottom_toBottomOf="@+id/custom_reminder_hour_edit_text"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="10dp"
-        android:text="hours"
-        android:textSize="18dp"/>
-
-    <EditText
-        android:id="@+id/custom_reminder_days_edit_text"
-        android:layout_width="50dp"
-        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/custom_reminder_date_text_view"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/custom_reminder_hour_edit_text"
-        android:layout_marginTop="8dp"
         android:layout_marginStart="5dp"
-        android:textSize="18dp"/>
-
-    <TextView
-        android:id="@+id/custom_reminder_days_text_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@+id/custom_reminder_days_edit_text"
-        app:layout_constraintBottom_toBottomOf="@+id/custom_reminder_days_edit_text"
-        android:layout_marginTop="8dp"
-        android:layout_marginStart="10dp"
-        android:text="days"
-        android:textSize="18dp"/>
+        android:layout_marginTop="1dp"
+        android:padding="8dp"
+        android:paddingBottom="12dp"
+        android:background="@color/colorPrimaryLight"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        android:text="Select Event Start Time"
+        />
 
     <ImageView
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@+id/custom_reminder_days_edit_text"
-        app:layout_constraintRight_toRightOf="@id/custom_reminder_days_text_view"
+        app:layout_constraintTop_toBottomOf="@+id/custom_reminder_time_text_view"
+        app:layout_constraintRight_toRightOf="@id/custom_reminder_time_text_view"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="10dp"
         android:src="@drawable/ic_done_white_24dp" />
@@ -96,7 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@+id/custom_reminder_days_edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/custom_reminder_time_text_view"
         app:layout_constraintRight_toLeftOf="@+id/save_button"
         android:layout_marginEnd="8dp"
         android:layout_marginTop="10dp"
