@@ -101,34 +101,38 @@
         android:hint="Event Location"
         />
 
-    <EditText
-        android:id="@+id/event_type_edit_text"
-        android:layout_width="wrap_content"
+    <Spinner
+        android:id="@+id/event_type_spinner"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toLeftOf="parent"
+        android:textColor="@color/white"
+        android:popupBackground="@color/colorPrimaryLight"
+        android:backgroundTint="@color/colorPrimaryLight"
         app:layout_constraintTop_toBottomOf="@+id/event_location_edit_text"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:hint="Event Type"
-        />
-
-    <EditText
-        android:id="@+id/event_reminder_edit_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/event_type_edit_text"
-        android:layout_marginStart="5dp"
-        android:hint="Event Duration"
-        />
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="5dp" />
+
+    <Spinner
+        android:id="@+id/set_reminder_spinner"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:popupBackground="@color/colorPrimaryLight"
+        android:backgroundTint="@color/colorPrimaryLight"
+        app:layout_constraintTop_toBottomOf="@+id/event_type_spinner"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="5dp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/save_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@+id/event_reminder_edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/set_reminder_spinner"
         app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_done_white_24dp" />
 
@@ -137,8 +141,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/colorPrimary"
-        app:layout_constraintTop_toBottomOf="@+id/event_reminder_edit_text"
+        app:layout_constraintTop_toBottomOf="@+id/set_reminder_spinner"
         app:layout_constraintRight_toLeftOf="@+id/save_fab"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:src="@drawable/ic_clear_white_24dp" />
 

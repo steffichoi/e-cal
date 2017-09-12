@@ -18,9 +18,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -50,6 +52,8 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
     private TextView mEventTimeEndTextView;
     private EditText mEventLocationEditText;
     private ImageView mEventLocationImageView;
+    private Spinner mEventTypeSpinner;
+    private Spinner mEventReminderSpinner;
 
     private DatePickerDialog.OnDateSetListener mDateStartSetListener;
     private DatePickerDialog.OnDateSetListener mDateEndSetListener;
@@ -188,6 +192,23 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
 
         mEventLocationImageView = (ImageView) myView.findViewById(R.id.event_location_image_view);
         mEventLocationImageView.setOnClickListener(this);
+
+
+        String[] eventTypes = new String[] {"Event", "Task", "Schedule"};
+        mEventTypeSpinner = (Spinner) myView.findViewById(R.id.event_type_spinner);
+
+        ArrayAdapter<String> typeAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item_layout, eventTypes);
+        typeAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_layout);
+
+        mEventTypeSpinner.setAdapter(typeAdapter);
+
+        String[] eventReminders = new String[] {"No Reminder", "30   mins", "60   mins", "90   mins", "120 mins", "Custom"};
+        mEventTypeSpinner = (Spinner) myView.findViewById(R.id.set_reminder_spinner);
+
+        ArrayAdapter<String> reminderAdapter = new ArrayAdapter<>(getActivity(), R.layout.spinner_item_layout, eventReminders);
+        reminderAdapter.setDropDownViewResource(R.layout.spinner_dropdown_item_layout);
+
+        mEventTypeSpinner.setAdapter(reminderAdapter);
 
         mSaveFab = (FloatingActionButton) myView.findViewById(R.id.save_fab);
         mSaveFab.setOnClickListener(this);
