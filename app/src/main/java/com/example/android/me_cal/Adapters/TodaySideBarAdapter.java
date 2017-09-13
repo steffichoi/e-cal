@@ -50,11 +50,13 @@ public class TodaySideBarAdapter extends
         }
         final String taskName = mCursor.getString(
                 mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_NAME));
-        final String taskTime = mCursor.getString(
-                mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME));
+        long taskTime = mCursor.getLong(
+                mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME_START));
+
+        final String time = helperFunctions.getTime(taskTime);
 
         holder.taskNameTextView.setText(taskName);
-        holder.taskTimeTextView.setText(taskTime);
+        holder.taskTimeTextView.setText(time);
 
         holder.taskNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,7 +66,7 @@ public class TodaySideBarAdapter extends
                 Bundle bundle = new Bundle();
 
                 bundle.putString("task_name", taskName);
-                bundle.putString("task_time", taskTime);
+                bundle.putString("task_time", time);
                 fragment.setArguments(bundle);
 
                 helperFunctions.switchMainContentFragment(fragment, mContext);

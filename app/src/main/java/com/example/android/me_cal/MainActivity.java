@@ -13,6 +13,7 @@ import android.view.MenuItem;
 import com.example.android.me_cal.Fragments.CustomCalendarView;
 import com.example.android.me_cal.Fragments.ShoppingFragment;
 import com.example.android.me_cal.Fragments.ToDoFragment;
+import com.example.android.me_cal.Fragments.TodayFragment;
 import com.example.android.me_cal.Fragments.TodaySideBarFragment;
 import com.example.android.me_cal.Fragments.WeekFragment;
 import com.example.android.me_cal.Helper.HelperFunctions;
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_today) {
-            helperFunctions.switchMainContentFragment(new TodaySideBarFragment(), this);
+            helperFunctions.switchMainContentFragment(new TodayFragment(), this);
             helperFunctions.switchSideContentFragment(new ToDoFragment(), this);
         } else if (id == R.id.nav_week) {
             helperFunctions.switchMainContentFragment(new WeekFragment(), this);

@@ -2,15 +2,11 @@ package com.example.android.me_cal.Helper;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.icu.text.DateFormatSymbols;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
-
-import com.example.android.me_cal.R;
 
 import java.util.Calendar;
 
@@ -29,7 +25,7 @@ public class HelperFunctionsFragment extends HelperFunctions{
         hFragment = fragment;
     }
 
-    public int[] getDate() {
+    public int[] getDateIntArray() {
         Calendar now = Calendar.getInstance();
         int month = now.get(Calendar.MONTH);
         int day = now.get(Calendar.DAY_OF_MONTH);
@@ -50,7 +46,7 @@ public class HelperFunctionsFragment extends HelperFunctions{
         TextView today_month_label_tv;
         TextView today_date_label_tv;
 
-        int[] monthDate = getDate();
+        int[] monthDate = getDateIntArray();
 
         String dateFromCal = Integer.toString(monthDate[0]);
         String monthFromCal = new DateFormatSymbols().getMonths()[monthDate[1]];

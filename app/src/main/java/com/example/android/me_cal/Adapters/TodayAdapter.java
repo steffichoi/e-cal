@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.me_cal.Fragments.TaskDetailFragment;
 import com.example.android.me_cal.Helper.HelperFunctions;
@@ -31,7 +32,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
     private String[] mDataset;
 
     private String taskName;
-    private String taskTime;
+    private long taskTime;
 
     public TodayAdapter(Context context, Cursor cursor, String[] myDataset) {
         this.mContext = context;
@@ -57,11 +58,14 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
 
         taskName = mCursor.getString(
                 mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_NAME));
-        taskTime = mCursor.getString(
-                mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME));
+        taskTime = mCursor.getLong(
+                mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME_START));
+
+        HelperFunctions helperFunctions = new HelperFunctions(mContext);
+        String time = helperFunctions.getTime(taskTime);
 
         holder.mTaskNameTv.setText(taskName);
-        holder.mTaskTimeTv.setText(taskTime);
+        holder.mTaskTimeTv.setText(time);
 
         long id = mCursor.getLong(mCursor.getColumnIndex(AddTaskContract.AddTaskEntry._ID));
         holder.itemView.setTag(id);
@@ -78,7 +82,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
                 Bundle bundle = new Bundle();
 
                 bundle.putString("task_name", taskName);
-                bundle.putString("task_time", taskTime);
+                bundle.putLong("task_time", taskTime);
                 fragment.setArguments(bundle);
 
                 helperFunctions.switchMainContentFragment(fragment, mContext);

@@ -250,6 +250,16 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
 
             case R.id.save_fab:
 
+                getViews();
+
+                if (mEventNameEditText.getText().equals("Event Name")) {
+                    Toast.makeText(getActivity(), "NAME EVENT BEFORE SAVING!", Toast.LENGTH_LONG).show();
+                    return;
+                } else if (eventNotSet()) {
+                    Toast.makeText(getActivity(), "SET START AND END TIME BEFORE SAVING!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
                 addToSchedule();
 
                 helperFunctions.switchMainContentFragment(new TodayFragment(), getActivity());
@@ -276,20 +286,24 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     public void addToSchedule() {
-
-        if (mEventNameEditText.getText().length() == 0 ||
-                mEventDateStartTextView.getText().equals("Select Date") ||
-                mEventTimeStartTextView.getText().equals("Select Event Start Time") ||
-                mEventTimeEndTextView.getText().equals("Select Event End Time") ||
-                mEventLocationEditText.getText().length() == 0) return;
-
+        getViews();
         AddTaskDbHelper dbHelper = new AddTaskDbHelper(getActivity());
 
-        dbHelper.addEvent(mEventNameEditText.getText().toString(),
-                mEventDateStartTextView.getText().toString(),
-                mEventTimeEndTextView.getText().toString(),
-                mEventTimeEndTextView.getText().toString(),
-                mEventLocationEditText.getText().toString());
+        String[] d = mEventDateStartTextView.getText().toString().split("\\s+");
+        long date = helperFunctions.getParsedDateInMillis(d[1], d[2], d[3]);
+
+        String date1 = mEventDateStartTextView.getText().toString();
+        String date2 = mEventDateEndTextView.getText().toString();
+        String time1 = mEventTimeStartTextView.getText().toString();
+        String time2 = mEventTimeEndTextView.getText().toString();
+        long[] times = helperFunctions.getParsedDateTimeInMillis(date1, date2, time1, time2);
+
+        dbHelper.addEvent(mEventNameEditText.getText().toString(), date, times[0], times[1],
+                mEventLocationEditText.getText().toString(),
+                mEventTypeSpinner.getSelectedItem().toString(),
+                mEventReminderSpinner.getSelectedItem().toString(),
+                getLongTime(mEventCustomReminderTextView.getText().toString()));
+
     }
 
     private DatePickerDialog.OnDateSetListener setDateListener(final TextView startTv, final TextView endTv) {
@@ -407,5 +421,16 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
             return true;
         }
         return false;
+    }
+
+    private long getLongTime(String date) {
+        SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy HH:mm");
+        try {
+            Date d = f.parse(date);
+            return d.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return -1;
+        }
     }
 }

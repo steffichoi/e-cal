@@ -19,14 +19,14 @@ IMPLEMENTED
 - spinner for add item type and set reminder
 - added custom reminder option; used date time picker
 - dont allow user to set reminder for empty event
-
+- reconfigured sqlite db to store datetime as int (extract as long)
+- detail item data extraction from db
 
 
 
 NOT IMPLEMENTED
 
 - need to constrain values being inputed into add task frgment and custom reminder
-- reconfigure db to take long time and additional fields
 - set reminder
 
 - to do list in side bar showing to do items for this date

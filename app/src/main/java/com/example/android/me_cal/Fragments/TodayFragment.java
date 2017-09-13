@@ -3,6 +3,7 @@ package com.example.android.me_cal.Fragments;
 import android.app.Fragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.icu.text.DateFormatSymbols;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -51,11 +52,14 @@ public class TodayFragment extends Fragment {
         final AddTaskDbHelper dbHelper = new AddTaskDbHelper(getActivity());
         mDb = dbHelper.getWritableDatabase();
 
-        int[] todayDate = helperFunctions.getDate();
-        final String dateQuery = Integer.toString(todayDate[0]) + "/" +
-                Integer.toString(todayDate[1]+1) + "/" + Integer.toString(todayDate[2]);
+        int[] todayDate = helperFunctions.getDateIntArray();
+        final String dateQuery = Integer.toString(todayDate[0]) + " " +
+                new DateFormatSymbols().getMonths()[todayDate[1]] + " " + Integer.toString(todayDate[2]);
 
-        Cursor cursor = dbHelper.getDay(dateQuery);
+        Toast.makeText(getActivity(), "date queried: " + dateQuery, Toast.LENGTH_LONG).show();
+        final long longDate = helperFunctions.getLongDate(dateQuery);
+
+        Cursor cursor = dbHelper.getDay(longDate);
 
         String[] timelist = {"10:00:00", "11:00:00", "12:00:00", "13:00:00", "14:00:00"};
         mAdapter = new TodayAdapter(getActivity(), cursor, timelist);
@@ -80,7 +84,7 @@ public class TodayFragment extends Fragment {
                             @Override
                             public void onClick(View view) {
                                 // reload the tasks
-                                mAdapter.swapCursor(dbHelper.getDay(dateQuery));
+                                mAdapter.swapCursor(dbHelper.getDay(longDate));
                             }
                         })
                         .setCallback(new Snackbar.Callback() {
@@ -90,7 +94,7 @@ public class TodayFragment extends Fragment {
 
                                 if (event != DISMISS_EVENT_ACTION) {
                                     dbHelper.removeGuest(id);
-                                    mAdapter.swapCursor(dbHelper.getDay(dateQuery));
+                                    mAdapter.swapCursor(dbHelper.getDay(longDate));
                                 }
                             }
                         });

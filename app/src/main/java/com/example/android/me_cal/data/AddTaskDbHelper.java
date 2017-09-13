@@ -10,16 +10,21 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.android.me_cal.Helper.HelperFunctions;
 import com.example.android.me_cal.data.AddTaskContract.*;
+
+import java.text.SimpleDateFormat;
 
 public class AddTaskDbHelper extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "tasks.db";
     static final int DATABASE_VERSION = 1;
+    private Context mContext;
 
     // Constructor
     public AddTaskDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+        mContext = context;
     }
 
     @Override
@@ -28,12 +33,13 @@ public class AddTaskDbHelper extends SQLiteOpenHelper{
                 AddTaskEntry.TABLE_NAME + " (" +
                 AddTaskEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 AddTaskEntry.COLUMN_TASK_NAME+ " TEXT NOT NULL, " +
-//                AddTaskEntry.COLUMN_TASK_TIME + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP, " +
-                AddTaskEntry.COLUMN_TASK_DATE + " TEXT NOT NULL, " +
-                AddTaskEntry.COLUMN_TASK_TIME + " TEXT NOT NULL, " +
-                AddTaskEntry.COLUMN_TASK_DURATION + " INTEGER DEFAULT 30, " +
-                AddTaskEntry.COLUMN_TASK_LOCATION + " TEXT DEFAULT NULL " +
-
+                AddTaskEntry.COLUMN_TASK_DATE + " INT NOT NULL, " +
+                AddTaskEntry.COLUMN_TASK_TIME_START + " INT NOT NULL, " +
+                AddTaskEntry.COLUMN_TASK_TIME_END + " INT NOT NULL, " +
+                AddTaskEntry.COLUMN_TASK_LOCATION + " TEXT DEFAULT NULL, " +
+                AddTaskEntry.COLUMN_TASK_TYPE + " TEXT NOT NULL, " +
+                AddTaskEntry.COLUMN_TASK_REMINDER + " TEXT NOT NULL, " +
+                AddTaskEntry.COLUMN_TASK_CUSTOM_REMINDER + " INT NOT NULL" +
                 "); ";
 
         db.execSQL(SQL_CREATE_WAITLIST_TABLE);
@@ -50,31 +56,29 @@ public class AddTaskDbHelper extends SQLiteOpenHelper{
     public Cursor getAllTasks() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.query(
-                AddTaskContract.AddTaskEntry.TABLE_NAME,
+                AddTaskEntry.TABLE_NAME,
                 null,
                 null,
                 null,
                 null,
                 null,
-                AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME
-        );
+                AddTaskEntry.COLUMN_TASK_TIME_START);
     }
 
-    public Cursor getTask(String taskName) {
+    public Cursor getTask(long taskTime) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + AddTaskEntry.TABLE_NAME+ " WHERE "
-                + AddTaskEntry.COLUMN_TASK_NAME+ "='" + taskName+"'";
+        String query = "SELECT * FROM " + AddTaskEntry.TABLE_NAME + " WHERE "
+                + AddTaskEntry.COLUMN_TASK_TIME_START + "='" + taskTime + "'";
 
         Cursor cursor = db.rawQuery(query, null);
 
         if(cursor != null) {
             cursor.moveToFirst();
         }
-
         return cursor;
     }
 
-    public Cursor getDay(String taskDate) {
+    public Cursor getDay(long taskDate) {
         SQLiteDatabase db = this.getReadableDatabase();
         String query = "SELECT * FROM " + AddTaskEntry.TABLE_NAME + " WHERE "
                 + AddTaskEntry.COLUMN_TASK_DATE + "='" + taskDate + "'";
@@ -86,15 +90,19 @@ public class AddTaskDbHelper extends SQLiteOpenHelper{
         return cursor;
     }
 
-    public long addEvent(String name, String date, String time, String duration, String location) {
+    public long addEvent(String name, long date, long timeStart, long timeEnd,
+                         String location, String type, String reminder, long customReminder) {
         SQLiteDatabase mDb = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
         cv.put(AddTaskEntry.COLUMN_TASK_NAME, name);
         cv.put(AddTaskEntry.COLUMN_TASK_DATE, date);
-        cv.put(AddTaskEntry.COLUMN_TASK_TIME, time);
-        cv.put(AddTaskEntry.COLUMN_TASK_DURATION, duration);
+        cv.put(AddTaskEntry.COLUMN_TASK_TIME_START, timeStart);
+        cv.put(AddTaskEntry.COLUMN_TASK_TIME_END, timeEnd);
         cv.put(AddTaskEntry.COLUMN_TASK_LOCATION, location);
+        cv.put(AddTaskEntry.COLUMN_TASK_TYPE, type);
+        cv.put(AddTaskEntry.COLUMN_TASK_REMINDER, reminder);
+        cv.put(AddTaskEntry.COLUMN_TASK_CUSTOM_REMINDER, customReminder);
 
         return mDb.insert(AddTaskEntry.TABLE_NAME, null, cv);
     }

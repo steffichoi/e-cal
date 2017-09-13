@@ -118,4 +118,32 @@ public class HelperFunctions {
         }
         datePickerDialog.show();
     }
+
+    public static String getDateTime(long millis) {
+        SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy HH:mm");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millis);
+        return f.format(calendar.getTime());
+    }
+
+    public static String getTime(long millis) {
+        android.icu.text.SimpleDateFormat f = new android.icu.text.SimpleDateFormat("dd MMM yyyy HH:mm");
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millis);
+        return f.format(calendar.getTime()).split("\\s+")[3];
+
+    }
+
+    public long getLongDate(String date) {
+        SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy");
+        try {
+            Date d = f.parse(date);
+            return d.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return -1;
+        }
+    }
 }

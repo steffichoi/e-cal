@@ -50,11 +50,12 @@ public class TodaySideBarFragment extends Fragment {
         AddTaskDbHelper dbHelper = new AddTaskDbHelper(getActivity());
         mDb = dbHelper.getWritableDatabase();
 
-        int[] todayDate = helperFunctions.getDate();
+        int[] todayDate = helperFunctions.getDateIntArray();
         String dateQuery = Integer.toString(todayDate[0]) + "/" +
                 Integer.toString(todayDate[1]+1) + "/" + Integer.toString(todayDate[2]);
+        long longDate = helperFunctions.getLongDate(dateQuery);
 
-        Cursor cursor = dbHelper.getDay(dateQuery);
+        Cursor cursor = dbHelper.getDay(longDate);
 
         mAdapter = new TodaySideBarAdapter(getActivity(), cursor);
 
@@ -62,7 +63,7 @@ public class TodaySideBarFragment extends Fragment {
 
         //         FLOATING ACTION BUTTON TO TODAY SCHEDULE
         FloatingActionButton dateFab = (FloatingActionButton) myView.findViewById(R.id.date_fab);
-        final int[] monthDate = helperFunctions.getDate();
+        final int[] monthDate = helperFunctions.getDateIntArray();
 
         dateFab.setOnClickListener(new View.OnClickListener() {
             @Override
