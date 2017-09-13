@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.me_cal.Fragments.TaskDetailFragment;
+import com.example.android.me_cal.Helper.HelperFunctions;
 import com.example.android.me_cal.data.AddTaskContract;
 import com.example.android.me_cal.R;
 
@@ -32,14 +33,12 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
     private String taskName;
     private String taskTime;
 
-    // Provide a suitable constructor (depends on the kind of dataset)
     public TodayAdapter(Context context, Cursor cursor, String[] myDataset) {
         this.mContext = context;
         mCursor = cursor;
         mDataset = myDataset;
     }
 
-    // Create new views (invoked by the layout manager)
     @Override
     public TodayAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent,
                                                      int viewType) {
@@ -56,8 +55,10 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
             return;
         }
 
-        taskName = mCursor.getString(mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_NAME));
-        taskTime = mCursor.getString(mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME));
+        taskName = mCursor.getString(
+                mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_NAME));
+        taskTime = mCursor.getString(
+                mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME));
 
         holder.mTaskNameTv.setText(taskName);
         holder.mTaskTimeTv.setText(taskTime);
@@ -71,7 +72,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
                 String currentValue = mDataset[position];
                 Log.d("CardView", "CardView Clicked: " + currentValue);
 
-                Activity activity = (Activity) mContext;
+                final HelperFunctions helperFunctions = new HelperFunctions(mContext);
 
                 Fragment fragment = new TaskDetailFragment();
                 Bundle bundle = new Bundle();
@@ -80,12 +81,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
                 bundle.putString("task_time", taskTime);
                 fragment.setArguments(bundle);
 
-                FragmentManager fragmentManager = activity.getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                fragmentTransaction.replace(R.id.main_content_frame, fragment);
-
-                fragmentTransaction.commit();
+                helperFunctions.switchMainContentFragment(fragment, mContext);
             }
         });
     }

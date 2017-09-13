@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.me_cal.Fragments.TaskDetailFragment;
+import com.example.android.me_cal.Helper.HelperFunctions;
 import com.example.android.me_cal.data.AddTaskContract;
 import com.example.android.me_cal.R;
 
@@ -22,18 +23,16 @@ import com.example.android.me_cal.R;
  * Created by steffichoi on 8/23/17.
  */
 
-public class TodaySideBarAdapter extends RecyclerView.Adapter<TodaySideBarAdapter.ScheduleViewHolder> {
+public class TodaySideBarAdapter extends
+        RecyclerView.Adapter<TodaySideBarAdapter.ScheduleViewHolder> {
 
     private Context mContext;
     private Cursor mCursor;
-
-
 
     public TodaySideBarAdapter(Context context, Cursor cursor) {
         this.mContext = context;
         mCursor = cursor;
     }
-
 
     @Override
     public ScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -44,11 +43,15 @@ public class TodaySideBarAdapter extends RecyclerView.Adapter<TodaySideBarAdapte
 
     @Override
     public void onBindViewHolder(ScheduleViewHolder holder, int position) {
+
+        final HelperFunctions helperFunctions = new HelperFunctions(mContext);
         if (!mCursor.moveToPosition(position)) {
             return;
         }
-        final String taskName = mCursor.getString(mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_NAME));
-        final String taskTime = mCursor.getString(mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME));
+        final String taskName = mCursor.getString(
+                mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_NAME));
+        final String taskTime = mCursor.getString(
+                mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME));
 
         holder.taskNameTextView.setText(taskName);
         holder.taskTimeTextView.setText(taskTime);
@@ -57,8 +60,6 @@ public class TodaySideBarAdapter extends RecyclerView.Adapter<TodaySideBarAdapte
             @Override
             public void onClick(View view) {
 
-                Activity activity = (Activity) mContext;
-
                 Fragment fragment = new TaskDetailFragment();
                 Bundle bundle = new Bundle();
 
@@ -66,25 +67,9 @@ public class TodaySideBarAdapter extends RecyclerView.Adapter<TodaySideBarAdapte
                 bundle.putString("task_time", taskTime);
                 fragment.setArguments(bundle);
 
-                FragmentManager fragmentManager = activity.getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-
-                fragmentTransaction.replace(R.id.main_content_frame, fragment);
-
-                fragmentTransaction.commit();
+                helperFunctions.switchMainContentFragment(fragment, mContext);
             }
         });
-    }
-
-    public void swapCursor(Cursor newCursor) {
-
-        if (mCursor != null) {
-            mCursor.close();
-        }
-        mCursor = newCursor;
-        if (newCursor != null) {
-            this.notifyDataSetChanged();
-        }
     }
 
     @Override

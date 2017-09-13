@@ -32,10 +32,12 @@ public class TodaySideBarFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.today_side_bar_layout, container, false);
 
-        helperFunctions.monthDateToTextView(myView, R.id.today_month_header_tv, R.id.today_date_header_tv);
+        helperFunctions.monthDateToTextView(
+                myView, R.id.today_month_header_tv, R.id.today_date_header_tv);
 
         //RECYCLER VIEW STUFF
         RecyclerView schedulerRecyclerView;

@@ -35,7 +35,8 @@ public class TodayFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(
+            LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.today_layout, container, false);
 
         helperFunctions.monthDateToTextView (myView, R.id.today_month_tv, R.id.today_date_tv);
@@ -64,7 +65,9 @@ public class TodayFragment extends Fragment {
         new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(0,
                 ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
             @Override
-            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            public boolean onMove(RecyclerView recyclerView,
+                                  RecyclerView.ViewHolder viewHolder,
+                                  RecyclerView.ViewHolder target) {
                 return false;
             }
 

@@ -151,7 +151,6 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                         customFragment.setArguments(bundle);
 
                         helperFunctions.switchSideContentFragment(customFragment, getActivity());
-
                     }
                 }
 
@@ -170,14 +169,9 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getActivity(),
-                        R.style.Theme_AppCompat_DayNight_Dialog,
-                        mDateStartSetListener, year, month, day);
-                datePickerDialog.getWindow().setBackgroundDrawable(
-                        new ColorDrawable(Color.WHITE));
-                datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
-                datePickerDialog.show();
+                helperFunctions.setDatePickerDialog(
+                        mDateStartSetListener, year, month,day,
+                        calendar.getTimeInMillis(), -1, getActivity());
             }
         });
         mDateStartSetListener = setDateListener(mEventDateStartTextView, mEventDateEndTextView);
@@ -194,35 +188,13 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
 
                     int year = Integer.parseInt(dateString[3]);
                     int day = Integer.parseInt(dateString[1]);
-                    Date date;
+                    int month = helperFunctions.getMonthInt(dateString[2]);
 
-                    try {
-                        date = new SimpleDateFormat("MMMM").parse(dateString[2]);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-                    Calendar cal = Calendar.getInstance();
-                    cal.setTime(date);
-                    int month = cal.get(Calendar.MONTH);
+                    long minDate = helperFunctions.getParsedDateInMillis(
+                            dateString[1], dateString[2], dateString[3]);
 
-                    SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy");
-                    long milliseconds;
-                    try {
-                        Date d = f.parse(dateString[1] + " " + dateString[2] + " " + dateString[3]);
-                        milliseconds = d.getTime();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-                    DatePickerDialog datePickerDialog = new DatePickerDialog(
-                            getActivity(),
-                            R.style.Theme_AppCompat_DayNight_Dialog,
-                            mDateEndSetListener, year, month, day);
-                    datePickerDialog.getWindow().setBackgroundDrawable(
-                            new ColorDrawable(Color.WHITE));
-                    datePickerDialog.getDatePicker().setMinDate(milliseconds);
-                    datePickerDialog.show();
+                    helperFunctions.setDatePickerDialog(
+                            mDateEndSetListener, year, month,day, minDate, -1, getActivity());
                 }
             }
         });
@@ -235,14 +207,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                 int hour = calendar.get(Calendar.HOUR);
                 int min = calendar.get(Calendar.MINUTE);
 
-                TimePickerDialog timeStartPickerDialogue = new TimePickerDialog(
-                        getActivity(),
-                        R.style.Theme_AppCompat_DayNight_Dialog,
-                        mTimeStartSetListener, hour, min, true);
-                timeStartPickerDialogue.getWindow().setBackgroundDrawable(
-                        new ColorDrawable(Color.TRANSPARENT));
-
-                timeStartPickerDialogue.show();
+                helperFunctions.setTimePickerDialog(mTimeStartSetListener, hour, min, getActivity());
             }
         });
         mTimeStartSetListener = setTimeListener(mEventTimeStartTextView, mEventTimeEndTextView);
@@ -264,13 +229,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                             int hour = calendar.get(Calendar.HOUR);
                             int min = calendar.get(Calendar.MINUTE);
 
-                            TimePickerDialog timeStartPickerDialogue = new TimePickerDialog(
-                                    getActivity(),
-                                    R.style.Theme_AppCompat_DayNight_Dialog,
-                                    mTimeEndSetListener, hour, min, true);
-                            timeStartPickerDialogue.getWindow().setBackgroundDrawable(
-                                    new ColorDrawable(Color.TRANSPARENT));
-                            timeStartPickerDialogue.show();
+                            helperFunctions.setTimePickerDialog(mTimeEndSetListener, hour, min, getActivity());
                         }
                     }
                 });
@@ -314,7 +273,6 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
         }
-
     }
 
     public void addToSchedule() {
@@ -353,34 +311,30 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 String minString = Integer.toString(minute);
                 String hourString = Integer.toString(hourOfDay);
+
                 if (minute < 10) {
                     minString = "0" + minString;
                 }
                 if (hourOfDay < 10) {
                     hourString = "0" + hourString;
                 }
+                String timeStart = hourString + ":" + minString;
 
                 if (startTv == mEventTimeEndTextView) {
-                    String timeStart = mEventTimeStartTextView.getText().toString();
-                    String[] dateStart = mEventDateStartTextView.getText().toString().split("\\s+");
-                    String[] dateEnd = mEventDateEndTextView.getText().toString().split("\\s+");
+                    String timeEnd = hourString + ":" + minString;
 
-                    SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy HH:mm");
-                    long startMillis, endMillis;
-                    try {
-                        Date d = f.parse(dateStart[1] + " " + dateStart[2] + " " + dateStart[3] + " " + timeStart);
-                        startMillis = d.getTime();
-                        d = f.parse(dateEnd[1] + " " + dateEnd[2] + " " + dateEnd[3] + " " + hourString + ":" + minString);
-                        endMillis = d.getTime();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-                    if (endMillis < startMillis) {
+                    long[] millis = helperFunctions.getParsedDateTimeInMillis(
+                            mEventDateStartTextView.getText().toString(),
+                            mEventDateEndTextView.getText().toString(),
+                            mEventTimeStartTextView.getText().toString(),
+                            timeEnd);
+
+                    if (millis[1] < millis[0]) {
                         Toast.makeText(getActivity(), "END TIME CANNOT BE BEFORE START TIME!",
                                 Toast.LENGTH_LONG).show();
                         return;
                     }
+
                 } else if (startTv == mEventTimeStartTextView) {
                     Calendar calendar = Calendar.getInstance();
                     int hourCurr = calendar.get(Calendar.HOUR);
@@ -389,28 +343,20 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                     int monthCurr = calendar.get(Calendar.MONTH);
                     int dayCurr = calendar.get(Calendar.DAY_OF_MONTH);
 
-                    String[] dateStart = mEventDateStartTextView.getText().toString().split("\\s+");
+                    String dateCurr = "DAY, " + dayCurr + " " + new DateFormatSymbols().getMonths()[monthCurr] + " " + yearCurr;
+                    String timeCurr = hourCurr + ":" + minCurr;
 
-                    SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy HH:mm");
-                    long startMillis, currMillis;
+                    long[] millis = helperFunctions.getParsedDateTimeInMillis(
+                            mEventDateStartTextView.getText().toString(),
+                            dateCurr, timeStart, timeCurr);
 
-                    try {
-                        Date d = f.parse(dateStart[1] + " " + dateStart[2] + " " + dateStart[3] + " " + hourString + ":" + minString);
-                        startMillis = d.getTime();
-                        d = f.parse(dayCurr + " " + new DateFormatSymbols().getMonths()[monthCurr] + " " + yearCurr + " " + hourCurr + ":" + minCurr);
-                        currMillis = d.getTime();
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                        return;
-                    }
-
-                    if (startMillis < currMillis) {
+                    if (millis[0] < millis[1]) {
                         Toast.makeText(getActivity(), "START TIME CANNOT BE IN THE PAST!", Toast.LENGTH_LONG).show();
                         return;
                     }
                 }
-                startTv.setText(hourString + ":" + minString);
-                endTv.setText(hourString + ":" + minString);
+                startTv.setText(timeStart);
+                endTv.setText(timeStart);
             }
         };
     }

@@ -46,6 +46,8 @@ public class CustomReminderFragment extends Fragment implements View.OnClickList
     private DatePickerDialog.OnDateSetListener mReminderDateSetListener;
     private TimePickerDialog.OnTimeSetListener mReminderTimeSetListener;
 
+    final Calendar calendar = Calendar.getInstance();
+
     HelperFunctions helperFunctions = new HelperFunctions(getActivity());
 
     @Nullable
@@ -80,37 +82,14 @@ public class CustomReminderFragment extends Fragment implements View.OnClickList
 
                 int year = Integer.parseInt(dateArrayStart[3]);
                 int day = Integer.parseInt(dateArrayStart[1]);
-                Date d;
+                int month = helperFunctions.getMonthInt(dateArrayStart[2]);
 
-                try {
-                    d = new SimpleDateFormat("MMMM").parse(dateArrayStart[2]);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    return;
-                }
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(d);
-                int month = cal.get(Calendar.MONTH);
+                long startMillis = helperFunctions.getParsedDateInMillis(
+                        dateArrayStart[1], dateArrayStart[2], dateArrayStart[3]);
 
-                SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy");
-                long startMillis;
-                try {
-                    d = f.parse(dateArrayStart[1] + " " + dateArrayStart[2] + " " + dateArrayStart[3]);
-                    startMillis = d.getTime();
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                    return;
-                }
-
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getActivity(),
-                        R.style.Theme_AppCompat_DayNight_Dialog,
-                        mReminderDateSetListener, year, month, day);
-                datePickerDialog.getWindow().setBackgroundDrawable(
-                        new ColorDrawable(Color.WHITE));
-                datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
-                datePickerDialog.getDatePicker().setMaxDate(startMillis);
-                datePickerDialog.show();
+                helperFunctions.setDatePickerDialog(
+                        mReminderDateSetListener, year, month,day,
+                        calendar.getTimeInMillis(), startMillis, getActivity());
             }
         });
         mReminderDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -130,13 +109,7 @@ public class CustomReminderFragment extends Fragment implements View.OnClickList
                 int hour = Integer.parseInt(time[0]);
                 int min = Integer.parseInt(time[1]);
 
-                TimePickerDialog timeStartPickerDialogue = new TimePickerDialog(
-                        getActivity(),
-                        R.style.Theme_AppCompat_DayNight_Dialog,
-                        mReminderTimeSetListener, hour, min, true);
-                timeStartPickerDialogue.getWindow().setBackgroundDrawable(
-                        new ColorDrawable(Color.TRANSPARENT));
-                timeStartPickerDialogue.show();
+                helperFunctions.setTimePickerDialog(mReminderTimeSetListener, hour, min, getActivity());
             }
         });
         mReminderTimeSetListener =
@@ -145,12 +118,6 @@ public class CustomReminderFragment extends Fragment implements View.OnClickList
                     String minString;
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        Calendar calendar = Calendar.getInstance();
-                        int hourCurr = calendar.get(Calendar.HOUR);
-                        int minCurr = calendar.get(Calendar.MINUTE);
-                        int yearCurr = calendar.get(Calendar.YEAR);
-                        int monthCurr = calendar.get(Calendar.MONTH);
-                        int dayCurr = calendar.get(Calendar.DAY_OF_MONTH);
 
                         minString = Integer.toString(minute);
                         hourString = Integer.toString(hourOfDay);
@@ -161,32 +128,19 @@ public class CustomReminderFragment extends Fragment implements View.OnClickList
                             hourString = "0" + hourString;
                         }
 
-                        SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy HH:mm");
-                        long startMillis, setMillis;
-                        mReminderDateTv = (TextView) myView.findViewById(R.id.custom_reminder_date_text_view);
-                        String[] setDate = mReminderDateTv.getText().toString().split("\\s+");
-                        String[] start = startDate.split("\\s+");
+                        String setTime = hourString + ":" + minString;
+                        long[] millis = helperFunctions.getParsedDateTimeInMillis(
+                                startDate, mReminderDateTv.getText().toString(),
+                                startTime, setTime);
 
-                        try {
-                            Date d = f.parse(start[1] + " " + start[2] + " " + start[3] + " " + startTime);
-                            startMillis = d.getTime();
-
-                            d = f.parse(setDate[1] + " " + setDate[2] + " " + setDate[3] + " " + hourString + ":" + minString);
-                            setMillis = d.getTime();
-                        } catch (ParseException e) {
-                            Toast.makeText(getActivity(), "parse...", Toast.LENGTH_SHORT).show();
-                            e.printStackTrace();
-                            return;
-                        }
-
-                        if (setMillis > startMillis) {
+                        if (millis[0] < millis[1]) {
                             Toast.makeText(getActivity(), "REMINDER CANNOT BE AFTER START TIME", Toast.LENGTH_LONG).show();
                             return;
-                        } else if (setMillis < calendar.getTimeInMillis()) {
+                        } else if (millis[1] < calendar.getTimeInMillis()) {
                             Toast.makeText(getActivity(), "REMINDER CANNOT BE IN THE PAST", Toast.LENGTH_LONG).show();
                             return;
                         }
-                        mReminderTimeTv.setText(hourString + ":" + minString);
+                        mReminderTimeTv.setText(setTime);
                     }
                 };
 
