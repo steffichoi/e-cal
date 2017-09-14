@@ -3,6 +3,7 @@ package com.example.android.me_cal.Fragments;
 import android.app.Fragment;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.icu.text.DateFormatSymbols;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -51,8 +52,8 @@ public class TodaySideBarFragment extends Fragment {
         mDb = dbHelper.getWritableDatabase();
 
         int[] todayDate = helperFunctions.getDateIntArray();
-        String dateQuery = Integer.toString(todayDate[0]) + "/" +
-                Integer.toString(todayDate[1]+1) + "/" + Integer.toString(todayDate[2]);
+        final String dateQuery = Integer.toString(todayDate[0]) + " " +
+                new DateFormatSymbols().getMonths()[todayDate[1]] + " " + Integer.toString(todayDate[2]);
         long longDate = helperFunctions.getLongDate(dateQuery);
 
         Cursor cursor = dbHelper.getDay(longDate);

@@ -30,7 +30,7 @@ public class TodaySideBarAdapter extends
     private Cursor mCursor;
 
     public TodaySideBarAdapter(Context context, Cursor cursor) {
-        this.mContext = context;
+        mContext = context;
         mCursor = cursor;
     }
 
@@ -50,10 +50,10 @@ public class TodaySideBarAdapter extends
         }
         final String taskName = mCursor.getString(
                 mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_NAME));
-        long taskTime = mCursor.getLong(
+        final long taskTime = mCursor.getLong(
                 mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME_START));
 
-        final String time = helperFunctions.getTime(taskTime);
+        String time = helperFunctions.getTime(taskTime);
 
         holder.taskNameTextView.setText(taskName);
         holder.taskTimeTextView.setText(time);
@@ -66,7 +66,7 @@ public class TodaySideBarAdapter extends
                 Bundle bundle = new Bundle();
 
                 bundle.putString("task_name", taskName);
-                bundle.putString("task_time", time);
+                bundle.putLong("task_time", taskTime);
                 fragment.setArguments(bundle);
 
                 helperFunctions.switchMainContentFragment(fragment, mContext);

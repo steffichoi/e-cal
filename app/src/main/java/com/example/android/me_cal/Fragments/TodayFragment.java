@@ -30,7 +30,6 @@ public class TodayFragment extends Fragment {
 
 
     private TodayAdapter mAdapter;
-    private SQLiteDatabase mDb;
 
     HelperFunctionsFragment helperFunctions = new HelperFunctionsFragment(getActivity(), this);
 
@@ -39,7 +38,6 @@ public class TodayFragment extends Fragment {
     public View onCreateView(
             LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         myView = inflater.inflate(R.layout.today_layout, container, false);
-
         helperFunctions.monthDateToTextView (myView, R.id.today_month_tv, R.id.today_date_tv);
 
         //RECYCLER VIEW STUFF
@@ -50,7 +48,7 @@ public class TodayFragment extends Fragment {
 
         //ADAPTER STUFF
         final AddTaskDbHelper dbHelper = new AddTaskDbHelper(getActivity());
-        mDb = dbHelper.getWritableDatabase();
+        dbHelper.getWritableDatabase();
 
         int[] todayDate = helperFunctions.getDateIntArray();
         final String dateQuery = Integer.toString(todayDate[0]) + " " +

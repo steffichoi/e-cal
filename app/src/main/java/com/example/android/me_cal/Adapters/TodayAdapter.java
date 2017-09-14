@@ -35,7 +35,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
     private long taskTime;
 
     public TodayAdapter(Context context, Cursor cursor, String[] myDataset) {
-        this.mContext = context;
+        mContext = context;
         mCursor = cursor;
         mDataset = myDataset;
     }
@@ -67,7 +67,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
         holder.mTaskNameTv.setText(taskName);
         holder.mTaskTimeTv.setText(time);
 
-        long id = mCursor.getLong(mCursor.getColumnIndex(AddTaskContract.AddTaskEntry._ID));
+        final long id = mCursor.getLong(mCursor.getColumnIndex(AddTaskContract.AddTaskEntry._ID));
         holder.itemView.setTag(id);
 
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +83,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
 
                 bundle.putString("task_name", taskName);
                 bundle.putLong("task_time", taskTime);
+                bundle.putLong("task_id", id);
                 fragment.setArguments(bundle);
 
                 helperFunctions.switchMainContentFragment(fragment, mContext);
@@ -91,13 +92,11 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
     }
 
     public void swapCursor(Cursor newCursor) {
-        // Always close the previous mCursor first
+
         if (mCursor != null) mCursor.close();
+
         mCursor = newCursor;
-        if (newCursor != null) {
-            // Force the RecyclerView to refresh
-            this.notifyDataSetChanged();
-        }
+        if (newCursor != null) this.notifyDataSetChanged();
     }
 
     @Override

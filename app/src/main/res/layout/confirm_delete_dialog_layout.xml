@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/confirm_dialogue_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="Confirm delete item from calendar!"
+        android:textSize="24sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textStyle="bold"
+        android:layout_marginBottom="18dp"
+        android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/confirm_dialog_yes_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="YES"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:background="@color/colorPrimaryLight"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_dialogue_header"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="70dp"
+
+        />
+
+    <Button
+        android:id="@+id/confirm_dialog_no_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NO"
+        android:textSize="16dp"
+        android:textStyle="bold"
+        android:background="@color/colorPrimaryLight"
+        android:textColor="@color/white"
+        app:layout_constraintTop_toBottomOf="@+id/confirm_dialogue_header"
+        app:layout_constraintLeft_toRightOf="@+id/confirm_dialog_yes_button"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="50dp"
+        />
+
+</android.support.constraint.ConstraintLayout>

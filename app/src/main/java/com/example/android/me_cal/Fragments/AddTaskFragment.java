@@ -60,7 +60,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
     private TextView mEventCustomReminderTextView;
 
     String[] eventTypes = new String[] {"Event", "Task", "Schedule"};
-    String[] eventReminders = new String[] {"No Reminder", "30   mins", "60   mins", "Custom"};
+    String[] eventReminders = new String[] {"No Reminder", "Set Reminder"};
 
     private DatePickerDialog.OnDateSetListener mDateStartSetListener;
     private DatePickerDialog.OnDateSetListener mDateEndSetListener;
@@ -119,11 +119,11 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     String reminder_choice = mEventReminderSpinner.getSelectedItem().toString();
-                    if (reminder_choice.equals("Custom")){
+                    if (reminder_choice.equals("Set Reminder")){
                         if (eventNotSet()) {
                             Toast.makeText(getActivity(),
                                     "PICK EVENT START AND END TIMES \n" +
-                                            "BEFORE SETTING CUSTOM REMINDER", Toast.LENGTH_LONG).show();
+                                            "BEFORE SETTING REMINDER", Toast.LENGTH_LONG).show();
                             return;
                         }
 
@@ -249,10 +249,9 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
         switch(v.getId()){
 
             case R.id.save_fab:
-
                 getViews();
 
-                if (mEventNameEditText.getText().equals("Event Name")) {
+                if (mEventNameEditText.getText().toString().equals("")) {
                     Toast.makeText(getActivity(), "NAME EVENT BEFORE SAVING!", Toast.LENGTH_LONG).show();
                     return;
                 } else if (eventNotSet()) {
@@ -261,13 +260,11 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                 }
 
                 addToSchedule();
-
                 helperFunctions.switchMainContentFragment(new TodayFragment(), getActivity());
                 helperFunctions.switchSideContentFragment(new ToDoFragment(), getActivity());
                 break;
 
             case R.id.cancel_fab:
-
                 helperFunctions.switchMainContentFragment(new CustomCalendarView(), getActivity());
                 helperFunctions.switchSideContentFragment(new TodaySideBarFragment(), getActivity());
                 break;
@@ -279,7 +276,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                 if (address.equals("")) {
                     Toast.makeText(getActivity(), "No address entered!", Toast.LENGTH_SHORT).show();
                 } else {
-                    openLocationInMap(address);
+                    helperFunctions.openLocationInMap(address, getActivity());
                 }
                 break;
         }
@@ -375,22 +372,6 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
         };
     }
 
-    private void openLocationInMap(String address) {
-
-        Toast.makeText(getActivity(), address, Toast.LENGTH_LONG).show();
-        Uri geoLocation = Uri.parse("geo:0,0?q=" + address);
-
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(geoLocation);
-
-        if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivity(intent);
-        } else {
-            Toast.makeText(getActivity(), "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!",
-                    Toast.LENGTH_LONG);
-        }
-    }
-
     private void getViews() {
         mEventNameEditText = (EditText) myView.findViewById(R.id.event_name_edit_text);
         mEventDateStartTextView = (TextView) myView.findViewById(R.id.event_date_start_text_view);
@@ -424,7 +405,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
     }
 
     private long getLongTime(String date) {
-        SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy HH:mm");
+        SimpleDateFormat f = new SimpleDateFormat("EEE, dd MMM yyyy HH:mm");
         try {
             Date d = f.parse(date);
             return d.getTime();

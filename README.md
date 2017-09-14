@@ -25,8 +25,8 @@ IMPLEMENTED
 
 
 NOT IMPLEMENTED
-
-- need to constrain values being inputed into add task frgment and custom reminder
+- on edit item, put info into bundle to add task
+- if editing, update db!
 - set reminder
 
 - to do list in side bar showing to do items for this date

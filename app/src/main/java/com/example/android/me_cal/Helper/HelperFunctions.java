@@ -7,9 +7,12 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.example.android.me_cal.R;
 
@@ -119,7 +122,7 @@ public class HelperFunctions {
         datePickerDialog.show();
     }
 
-    public static String getDateTime(long millis) {
+    public String getDateTime(long millis) {
         SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy HH:mm");
 
         Calendar calendar = Calendar.getInstance();
@@ -127,7 +130,7 @@ public class HelperFunctions {
         return f.format(calendar.getTime());
     }
 
-    public static String getTime(long millis) {
+    public String getTime(long millis) {
         android.icu.text.SimpleDateFormat f = new android.icu.text.SimpleDateFormat("dd MMM yyyy HH:mm");
 
         Calendar calendar = Calendar.getInstance();
@@ -144,6 +147,22 @@ public class HelperFunctions {
         } catch (ParseException e) {
             e.printStackTrace();
             return -1;
+        }
+    }
+
+    public void openLocationInMap(String address, Context context) {
+
+        Toast.makeText(context, address, Toast.LENGTH_LONG).show();
+        Uri geoLocation = Uri.parse("geo:0,0?q=" + address);
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(geoLocation);
+
+        if (intent.resolveActivity(context.getPackageManager()) != null) {
+            context.startActivity(intent);
+        } else {
+            Toast.makeText(context, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!",
+                    Toast.LENGTH_LONG);
         }
     }
 }
