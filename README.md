@@ -23,6 +23,7 @@ IMPLEMENTED
 - detail item data extraction from db
 - on edit item, put info into bundle to add task
 - if editing, update db!
+- view of weekly schedule through drawer navigator
 
 
 
@@ -32,7 +33,6 @@ NOT IMPLEMENTED
 - to do list in side bar showing to do items for this date
 ->// add task button present? or click on time slot?
 
-- view of weekly schedule through drawer navigator
 - view of activity details when one item in weekly schedule is clicked
 - can navigate to next week through drop down menu as header
 - navigate to daily view when date column clicked on

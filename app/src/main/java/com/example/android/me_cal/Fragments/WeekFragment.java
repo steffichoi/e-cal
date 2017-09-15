@@ -20,7 +20,7 @@ public class WeekFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
-        myView = inflater.inflate(R.layout.week_layout, container, false);
+        myView = inflater.inflate(R.layout.week_day_layout, container, false);
         return myView;
     }
 }

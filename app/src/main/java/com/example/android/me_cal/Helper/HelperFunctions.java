@@ -34,7 +34,6 @@ public class HelperFunctions {
 
 
     public void switchMainContentFragment(Fragment fragment, Context context) {
-        Activity activity = (Activity) context;
         FragmentManager fragmentManager = activity.getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -44,13 +43,22 @@ public class HelperFunctions {
     }
 
     public void switchSideContentFragment(Fragment fragment, Context context) {
-        Activity activity = (Activity) context;
         FragmentManager fragmentManager = activity.getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         fragmentTransaction.replace(R.id.side_content_frame, fragment);
 
         fragmentTransaction.commit();
+    }
+
+    public void switchFragment(int frame_id, Fragment fragment, Context context) {
+        FragmentManager fragmentManager = activity.getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.replace(frame_id, fragment);
+
+        fragmentTransaction.commit();
+
     }
 
     public int getMonthInt(String monthString) {
