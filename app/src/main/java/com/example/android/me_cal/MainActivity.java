@@ -1,5 +1,6 @@
 package com.example.android.me_cal;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -87,7 +88,9 @@ public class MainActivity extends AppCompatActivity
             helperFunctions.switchMainContentFragment(new TodayFragment(), this);
             helperFunctions.switchSideContentFragment(new ToDoFragment(), this);
         } else if (id == R.id.nav_week) {
-            helperFunctions.switchMainContentFragment(new WeekFragment(), this);
+            Intent intent = new Intent(this, WeekActivity.class);
+//            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
         } else if (id == R.id.nav_month) {
             helperFunctions.switchMainContentFragment(new CustomCalendarView(), this);
             helperFunctions.switchSideContentFragment(new TodaySideBarFragment(), this);
@@ -109,22 +112,4 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-//    private void switchMainContentFragment(Fragment fragment) {
-//        FragmentManager fragmentManager = getFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//
-//        fragmentTransaction.replace(R.id.main_content_frame, fragment);
-//
-//        fragmentTransaction.commit();
-//    }
-//
-//    private void switchSideContentFragment(Fragment fragment) {
-//        FragmentManager fragmentManager = getFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//
-//        fragmentTransaction.replace(R.id.side_content_frame, fragment);
-//
-//        fragmentTransaction.commit();
-//    }
 }
