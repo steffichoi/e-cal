@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.me_cal.Fragments.TaskDetailFragment;
+import com.example.android.me_cal.Fragments.TodaySideBarFragment;
 import com.example.android.me_cal.Helper.HelperFunctions;
 import com.example.android.me_cal.data.AddTaskContract;
 import com.example.android.me_cal.R;

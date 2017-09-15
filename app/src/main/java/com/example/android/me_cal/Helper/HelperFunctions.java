@@ -123,7 +123,7 @@ public class HelperFunctions {
     }
 
     public String getDateTime(long millis) {
-        SimpleDateFormat f = new SimpleDateFormat("dd MMM yyyy HH:mm");
+        SimpleDateFormat f = new SimpleDateFormat("EEE, dd MMMM yyyy HH:mm");
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(millis);

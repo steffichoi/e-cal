@@ -14,6 +14,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -48,6 +50,7 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
     ImageView deleteButton;
 
     long id = -1;
+    long startLong;
 
     HelperFunctionsFragment helperFunctions = new HelperFunctionsFragment(getActivity(), this);
 
@@ -78,22 +81,25 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         long startTimeFromDb = cursor.getLong(cursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME_START));
         long endTimeFromDb = cursor.getLong(cursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME_END));
 
+        startLong = startTimeFromDb;
         String[] start = helperFunctions.getDateTime(startTimeFromDb).split("\\s+");
         String[] end = helperFunctions.getDateTime(endTimeFromDb).split("\\s+");
 
         taskNameTv.setText(nameFromDb);
-        taskStartDateTv.setText(start[0] + " " + start[1] + " " + start[2]);
-        taskStartTimeTv.setText(start[3]);
-        taskEndDateTv.setText(end[0] + " " + end[1] + " " + end[2]);
-        taskEndTimeTv.setText(end[3]);
+        taskStartDateTv.setText(start[0] + " " + start[1] + " " + start[2] + " " + start[3]);
+        taskStartTimeTv.setText(start[4]);
+        taskEndDateTv.setText(end[0] + " " + end[1] + " " + end[2] + " " + end[3]);
+        taskEndTimeTv.setText(end[4]);
         taskLocationTv.setText(locationFromDb);
         taskTypeTv.setText(typeFromDb);
 
         String reminderFromDb = cursor.getString(cursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_REMINDER));
 
-        if (reminderFromDb.equals("Custom")) {
+        if (reminderFromDb.equals("Set Reminder")) {
             long reminderCustomFromDb = cursor.getLong(cursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_CUSTOM_REMINDER));
             taskReminderTv.setText(helperFunctions.getDateTime(reminderCustomFromDb));
+        } else {
+            taskReminderTv.setText("no reminder set");
         }
 
         taskLocationIv.setOnClickListener(this);
@@ -107,12 +113,47 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         switch(v.getId()) {
 
             case R.id.detail_item_edit_button:
-                helperFunctions.switchMainContentFragment(new AddTaskFragment(), getActivity());
-                helperFunctions.switchSideContentFragment(new TodaySideBarFragment(), getActivity());
+                getViews();
+                Fragment editFragment = new AddTaskFragment();
+                Bundle bundle = new Bundle();
+
+                String name = taskNameTv.getText().toString();
+                String startDate = taskStartDateTv.getText().toString();
+                String startTime = taskStartTimeTv.getText().toString();
+                String endDate = taskEndDateTv.getText().toString();
+                String endTime = taskEndTimeTv.getText().toString();
+                String location = taskLocationTv.getText().toString();
+                String type = taskTypeTv.getText().toString();
+                String reminder = taskReminderTv.getText().toString();
+
+                bundle.putString("event_name", name);
+                bundle.putString("start_date", startDate);
+                bundle.putString("start_time", startTime);
+                bundle.putString("end_date", endDate);
+                bundle.putString("end_time", endTime);
+                bundle.putString("location", location);
+                bundle.putString("type", type);
+                bundle.putString("custom_reminder", reminder);
+                bundle.putBoolean("edit_task", true);
+                bundle.putLong("task_id", id);
+
+                editFragment.setArguments(bundle);
+
+                helperFunctions.switchMainContentFragment(editFragment, getActivity());
+
+                Fragment sbFragment = new TodaySideBarFragment();
+
+                String[] dateString = helperFunctions.getDateTime(startLong).split("\\s+");
+                bundle.putInt("date_from_cal", Integer.parseInt(dateString[1]));
+                bundle.putInt("month_from_cal", helperFunctions.getMonthInt(dateString[2]));
+                bundle.putInt("year_from_cal", Integer.parseInt(dateString[3]));
+
+                sbFragment.setArguments(bundle);
+                helperFunctions.switchSideContentFragment(sbFragment, getActivity());
                 break;
 
             case R.id.detail_item_delete_button:
-                final Dialog dialog = new Dialog(getActivity());
+                final Dialog dialog = new Dialog(getActivity(), R.style.Theme_AppCompat_Light_Dialog_MinWidth);
                 dialog.setContentView(R.layout.confirm_delete_dialog_layout);
 
                 Button yesButton = (Button) dialog.findViewById(R.id.confirm_dialog_yes_button);
@@ -122,11 +163,21 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
                     @Override
                     public void onClick(View v) {
                         AddTaskDbHelper dbHelper = new AddTaskDbHelper(getActivity());
-                        dbHelper.getWritableDatabase();
+
                         dbHelper.removeGuest(id);
                         Toast.makeText(getActivity(), "Deleted item!", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
-                        helperFunctions.switchMainContentFragment(new TodayFragment(), getActivity());
+
+                        Fragment tFragment = new TodayFragment();
+                        Bundle b = new Bundle();
+                        String[] dateString = helperFunctions.getDateTime(startLong).split("\\s+");
+                        b.putInt("date_from_cal", Integer.parseInt(dateString[1]));
+                        b.putInt("month_from_cal", helperFunctions.getMonthInt(dateString[2]));
+                        b.putInt("year_from_cal", Integer.parseInt(dateString[3]));
+                        tFragment.setArguments(b);
+
+                        helperFunctions.switchMainContentFragment(tFragment, getActivity());
+                        helperFunctions.switchSideContentFragment(new ToDoFragment(), getActivity());
                     }
                 });
 
@@ -137,6 +188,8 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
                     }
                 });
                 dialog.show();
+                Window window = dialog.getWindow();
+                window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
                 break;
 
             case R.id.detail_item_location_iv:

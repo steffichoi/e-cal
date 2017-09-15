@@ -21,6 +21,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.me_cal.Fragments.TaskDetailFragment;
+import com.example.android.me_cal.Fragments.TodaySideBarFragment;
 import com.example.android.me_cal.Helper.HelperFunctions;
 import com.example.android.me_cal.data.AddTaskContract;
 import com.example.android.me_cal.R;
@@ -78,15 +79,26 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
 
                 final HelperFunctions helperFunctions = new HelperFunctions(mContext);
 
-                Fragment fragment = new TaskDetailFragment();
+                Fragment tdFragment = new TaskDetailFragment();
                 Bundle bundle = new Bundle();
 
                 bundle.putString("task_name", taskName);
                 bundle.putLong("task_time", taskTime);
                 bundle.putLong("task_id", id);
-                fragment.setArguments(bundle);
+                tdFragment.setArguments(bundle);
 
-                helperFunctions.switchMainContentFragment(fragment, mContext);
+                helperFunctions.switchMainContentFragment(tdFragment, mContext);
+
+                Fragment sbFragment = new TodaySideBarFragment();
+
+                String[] dateString = helperFunctions.getDateTime(taskTime).split("\\s+");
+                bundle.putInt("date_from_cal", Integer.parseInt(dateString[1]));
+                bundle.putInt("month_from_cal", helperFunctions.getMonthInt(dateString[2]));
+                bundle.putInt("year_from_cal", Integer.parseInt(dateString[3]));
+
+                sbFragment.setArguments(bundle);
+
+                helperFunctions.switchSideContentFragment(sbFragment, mContext);
             }
         });
     }

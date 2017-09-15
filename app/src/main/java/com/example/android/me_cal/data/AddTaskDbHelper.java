@@ -52,7 +52,6 @@ public class AddTaskDbHelper extends SQLiteOpenHelper{
         onCreate(db);
     }
 
-
     public Cursor getAllTasks() {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.query(
@@ -105,6 +104,23 @@ public class AddTaskDbHelper extends SQLiteOpenHelper{
         cv.put(AddTaskEntry.COLUMN_TASK_CUSTOM_REMINDER, customReminder);
 
         return mDb.insert(AddTaskEntry.TABLE_NAME, null, cv);
+    }
+
+    public void update (String name, long date, long timeStart, long timeEnd,
+                        String location, String type, String reminder, long customReminder, long id) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+
+        cv.put(AddTaskEntry.COLUMN_TASK_NAME, name);
+        cv.put(AddTaskEntry.COLUMN_TASK_DATE, date);
+        cv.put(AddTaskEntry.COLUMN_TASK_TIME_START, timeStart);
+        cv.put(AddTaskEntry.COLUMN_TASK_TIME_END, timeEnd);
+        cv.put(AddTaskEntry.COLUMN_TASK_LOCATION, location);
+        cv.put(AddTaskEntry.COLUMN_TASK_TYPE, type);
+        cv.put(AddTaskEntry.COLUMN_TASK_REMINDER, reminder);
+        cv.put(AddTaskEntry.COLUMN_TASK_CUSTOM_REMINDER, customReminder);
+
+        db.update(AddTaskEntry.TABLE_NAME, cv, AddTaskEntry._ID + "=" + id, null);
     }
 
     public boolean removeGuest(long id) {

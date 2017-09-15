@@ -19,14 +19,14 @@ IMPLEMENTED
 - spinner for add item type and set reminder
 - added custom reminder option; used date time picker
 - dont allow user to set reminder for empty event
-- reconfigured sqlite db to store datetime as int (extract as long)
+- reconfigured sqlite db to store datetime as int (extract as long); added db instrumented testing
 - detail item data extraction from db
+- on edit item, put info into bundle to add task
+- if editing, update db!
 
 
 
 NOT IMPLEMENTED
-- on edit item, put info into bundle to add task
-- if editing, update db!
 - set reminder
 
 - to do list in side bar showing to do items for this date

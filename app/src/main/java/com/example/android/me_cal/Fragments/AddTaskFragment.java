@@ -6,6 +6,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.icu.text.DateFormatSymbols;
@@ -67,6 +68,9 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
     private TimePickerDialog.OnTimeSetListener mTimeStartSetListener;
     private TimePickerDialog.OnTimeSetListener mTimeEndSetListener;
 
+    private boolean edit = false;
+    private long id = -1;
+
     private FloatingActionButton mSaveFab;
     private FloatingActionButton mCancelFab;
 
@@ -81,17 +85,19 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
 
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            Bundle transferBundle = bundle.getBundle("add_task_bundle");
 
-            if (transferBundle != null) {
-                String name = transferBundle.getString("event_name");
-                String startDate = transferBundle.getString("start_date");
-                String startTime = transferBundle.getString("start_time");
-                String endDate = transferBundle.getString("end_date");
-                String endTime = transferBundle.getString("end_time");
-                String location = transferBundle.getString("location");
-                String type = transferBundle.getString("type");
-                String reminder = transferBundle.getString("reminder");
+            if (bundle.getBoolean("edit_task")) {
+                edit = true;
+
+                String name = bundle.getString("event_name");
+                String startDate = bundle.getString("start_date");
+                String startTime = bundle.getString("start_time");
+                String endDate = bundle.getString("end_date");
+                String endTime = bundle.getString("end_time");
+                String location = bundle.getString("location");
+                String type = bundle.getString("type");
+                String reminder = bundle.getString("custom_reminder");
+                id = bundle.getLong("task_id");
 
                 mEventNameEditText.setText(name);
                 mEventDateStartTextView.setText(startDate);
@@ -100,66 +106,110 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                 mEventTimeEndTextView.setText(endTime);
                 mEventLocationEditText.setText(location);
 
-                ArrayAdapter<String> typeAdapter = setSpinnerAdapter (eventTypes, mEventTypeSpinner);
+                ArrayAdapter<String> typeAdapter = setSpinnerAdapter(eventTypes, mEventTypeSpinner);
                 int typePos = typeAdapter.getPosition(type);
                 mEventTypeSpinner.setSelection(typePos);
 
-                ArrayAdapter<String> reminderAdapter = setSpinnerAdapter(eventReminders, mEventReminderSpinner);
-                int reminderPos = reminderAdapter.getPosition(reminder);
-                mEventReminderSpinner.setSelection(reminderPos);
+
+                if (reminder.equals("Set Reminder")) {
+                    ArrayAdapter<String> reminderAdapter = setSpinnerAdapter(eventReminders, mEventReminderSpinner);
+                    int reminderPos = reminderAdapter.getPosition(reminder);
+                    mEventReminderSpinner.setSelection(reminderPos);
+                } else {
+                    ArrayAdapter<String> reminderAdapter = setSpinnerAdapter(eventReminders, mEventReminderSpinner);
+                }
+
+            } else {
+                Bundle transferBundle = bundle.getBundle("add_task_bundle");
+
+                if (transferBundle != null) {
+
+                    if (transferBundle.getBoolean("edit_task")) {
+                        edit = true;
+                        id = transferBundle.getLong("task_id");
+                    }
+
+                    String name = transferBundle.getString("event_name");
+                    String startDate = transferBundle.getString("start_date");
+                    String startTime = transferBundle.getString("start_time");
+                    String endDate = transferBundle.getString("end_date");
+                    String endTime = transferBundle.getString("end_time");
+                    String location = transferBundle.getString("location");
+                    String type = transferBundle.getString("type");
+                    String reminder = transferBundle.getString("reminder");
+
+                    mEventNameEditText.setText(name);
+                    mEventDateStartTextView.setText(startDate);
+                    mEventTimeStartTextView.setText(startTime);
+                    mEventDateEndTextView.setText(endDate);
+                    mEventTimeEndTextView.setText(endTime);
+                    mEventLocationEditText.setText(location);
+
+                    ArrayAdapter<String> typeAdapter = setSpinnerAdapter(eventTypes, mEventTypeSpinner);
+                    int typePos = typeAdapter.getPosition(type);
+                    mEventTypeSpinner.setSelection(typePos);
+
+                    ArrayAdapter<String> reminderAdapter = setSpinnerAdapter(eventReminders, mEventReminderSpinner);
+                    int reminderPos = reminderAdapter.getPosition(reminder);
+                    mEventReminderSpinner.setSelection(reminderPos);
+                }
             }
             String customReminder = bundle.getString("custom_reminder");
             mEventCustomReminderTextView.setText(customReminder);
 
         } else {
-            ArrayAdapter<String> typeAdapter = setSpinnerAdapter (eventTypes, mEventTypeSpinner);
+            ArrayAdapter<String> typeAdapter = setSpinnerAdapter(eventTypes, mEventTypeSpinner);
             ArrayAdapter<String> reminderAdapter = setSpinnerAdapter(eventReminders, mEventReminderSpinner);
-
-            mEventReminderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    String reminder_choice = mEventReminderSpinner.getSelectedItem().toString();
-                    if (reminder_choice.equals("Set Reminder")){
-                        if (eventNotSet()) {
-                            Toast.makeText(getActivity(),
-                                    "PICK EVENT START AND END TIMES \n" +
-                                            "BEFORE SETTING REMINDER", Toast.LENGTH_LONG).show();
-                            return;
-                        }
-
-                        Fragment customFragment = new CustomReminderFragment();
-                        Bundle bundle = new Bundle();
-
-                        String name = mEventNameEditText.getText().toString();
-                        String startDate = mEventDateStartTextView.getText().toString();
-                        String startTime = mEventTimeStartTextView.getText().toString();
-                        String endDate = mEventDateEndTextView.getText().toString();
-                        String endTime = mEventTimeEndTextView.getText().toString();
-                        String location = mEventLocationEditText.getText().toString();
-                        String type = mEventTypeSpinner.getSelectedItem().toString();
-                        String reminder = mEventReminderSpinner.getSelectedItem().toString();
-
-                        bundle.putString("event_name", name);
-                        bundle.putString("start_date", startDate);
-                        bundle.putString("start_time", startTime);
-                        bundle.putString("end_date", endDate);
-                        bundle.putString("end_time", endTime);
-                        bundle.putString("location", location);
-                        bundle.putString("type", type);
-                        bundle.putString("reminder", reminder);
-
-                        customFragment.setArguments(bundle);
-
-                        helperFunctions.switchSideContentFragment(customFragment, getActivity());
-                    }
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
         }
+
+        mEventReminderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String reminder_choice = mEventReminderSpinner.getSelectedItem().toString();
+                if (reminder_choice.equals("Set Reminder")){
+                    if (eventNotSet()) {
+                        Toast.makeText(getActivity(),
+                                "PICK EVENT START AND END TIMES \n" +
+                                        "BEFORE SETTING REMINDER", Toast.LENGTH_LONG).show();
+                        return;
+                    }
+
+                    Fragment customFragment = new CustomReminderFragment();
+                    Bundle bundle = new Bundle();
+
+                    if (edit) {
+                        bundle.putLong("task_id", id);
+                        bundle.putBoolean("edit_task", true);
+                    }
+
+                    String name = mEventNameEditText.getText().toString();
+                    String startDate = mEventDateStartTextView.getText().toString();
+                    String startTime = mEventTimeStartTextView.getText().toString();
+                    String endDate = mEventDateEndTextView.getText().toString();
+                    String endTime = mEventTimeEndTextView.getText().toString();
+                    String location = mEventLocationEditText.getText().toString();
+                    String type = mEventTypeSpinner.getSelectedItem().toString();
+                    String reminder = mEventReminderSpinner.getSelectedItem().toString();
+
+                    bundle.putString("event_name", name);
+                    bundle.putString("start_date", startDate);
+                    bundle.putString("start_time", startTime);
+                    bundle.putString("end_date", endDate);
+                    bundle.putString("end_time", endTime);
+                    bundle.putString("location", location);
+                    bundle.putString("type", type);
+                    bundle.putString("reminder", reminder);
+
+                    customFragment.setArguments(bundle);
+
+                    helperFunctions.switchSideContentFragment(customFragment, getActivity());
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) { }
+        });
+
 
         mEventDateStartTextView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -258,7 +308,6 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(), "SET START AND END TIME BEFORE SAVING!", Toast.LENGTH_LONG).show();
                     return;
                 }
-
                 addToSchedule();
                 helperFunctions.switchMainContentFragment(new TodayFragment(), getActivity());
                 helperFunctions.switchSideContentFragment(new ToDoFragment(), getActivity());
@@ -295,11 +344,20 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
         String time2 = mEventTimeEndTextView.getText().toString();
         long[] times = helperFunctions.getParsedDateTimeInMillis(date1, date2, time1, time2);
 
-        dbHelper.addEvent(mEventNameEditText.getText().toString(), date, times[0], times[1],
-                mEventLocationEditText.getText().toString(),
-                mEventTypeSpinner.getSelectedItem().toString(),
-                mEventReminderSpinner.getSelectedItem().toString(),
-                getLongTime(mEventCustomReminderTextView.getText().toString()));
+        if (edit) {
+            Toast.makeText(getActivity(), "updating db at " + id, Toast.LENGTH_LONG).show();
+            dbHelper.update(mEventNameEditText.getText().toString(), date, times[0], times[1],
+                    mEventLocationEditText.getText().toString(),
+                    mEventTypeSpinner.getSelectedItem().toString(),
+                    mEventReminderSpinner.getSelectedItem().toString(),
+                    getLongTime(mEventCustomReminderTextView.getText().toString()), id);
+        } else {
+            dbHelper.addEvent(mEventNameEditText.getText().toString(), date, times[0], times[1],
+                    mEventLocationEditText.getText().toString(),
+                    mEventTypeSpinner.getSelectedItem().toString(),
+                    mEventReminderSpinner.getSelectedItem().toString(),
+                    getLongTime(mEventCustomReminderTextView.getText().toString()));
+        }
 
     }
 
@@ -312,6 +370,16 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                 String dayOfWeek = DateFormat.format("EE", new Date(year, month, dayOfMonth - 1)).toString();
                 startTv.setText(dayOfWeek + ", " + dayOfMonth + " " + monthString + " " + year);
                 endTv.setText(dayOfWeek + ", " + dayOfMonth + " " + monthString + " " + year);
+
+                Fragment sbFragment = new TodaySideBarFragment();
+
+                Bundle bundle = new Bundle();
+                bundle.putInt("date_from_cal", dayOfMonth);
+                bundle.putInt("month_from_cal", month);
+                bundle.putInt("year_from_cal", year);
+
+                sbFragment.setArguments(bundle);
+                helperFunctions.switchSideContentFragment(sbFragment, getActivity());
             }
         };
     }
