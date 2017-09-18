@@ -10,14 +10,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import com.example.android.me_cal.Fragments.CustomCalendarView;
+import com.example.android.me_cal.Fragments.CustomCalendarFragment;
 import com.example.android.me_cal.Fragments.ShoppingFragment;
 import com.example.android.me_cal.Fragments.ToDoFragment;
 import com.example.android.me_cal.Fragments.TodayFragment;
 import com.example.android.me_cal.Fragments.TodaySideBarFragment;
-import com.example.android.me_cal.Fragments.WeekFragment;
 import com.example.android.me_cal.Helper.HelperFunctions;
+import com.example.android.me_cal.NotificationUtil.*;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity
 
         //Generate the calendar view as a fragment so it will be interchangable with
         //other fragments associated with the navigation actions
-        helperFunctions.switchMainContentFragment(new CustomCalendarView(), this);
+        helperFunctions.switchMainContentFragment(new CustomCalendarFragment(), this);
         helperFunctions.switchSideContentFragment(new TodaySideBarFragment(), this);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -92,7 +93,7 @@ public class MainActivity extends AppCompatActivity
 //            intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
         } else if (id == R.id.nav_month) {
-            helperFunctions.switchMainContentFragment(new CustomCalendarView(), this);
+            helperFunctions.switchMainContentFragment(new CustomCalendarFragment(), this);
             helperFunctions.switchSideContentFragment(new TodaySideBarFragment(), this);
         } else if (id == R.id.nav_to_do) {
             helperFunctions.switchMainContentFragment(new ToDoFragment(), this);

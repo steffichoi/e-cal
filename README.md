@@ -24,11 +24,10 @@ IMPLEMENTED
 - on edit item, put info into bundle to add task
 - if editing, update db!
 - view of weekly schedule through drawer navigator
-
+- set reminder/alarm for reminder/notification
 
 
 NOT IMPLEMENTED
-- set reminder
 
 - to do list in side bar showing to do items for this date
 ->// add task button present? or click on time slot?
@@ -64,6 +63,10 @@ PART 2 stuff to do when done with basic functionalities
 NEED TO DO
 - review code in adapters. should be able to condense
 - use string resources to clean up code
+
+
+BUGSS!!!
+- add task time. needs to be 24 hr...? or something on that page is broken
 
 REQUEST:
 (enrico)

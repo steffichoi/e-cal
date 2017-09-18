@@ -17,7 +17,7 @@ import com.example.android.me_cal.Helper.HelperFunctions;
  * Created by steffichoi on 8/17/17.
  */
 
-public class CustomCalendarView extends Fragment {
+public class CustomCalendarFragment extends Fragment {
 
     View myView;
     CalendarView calendarView;

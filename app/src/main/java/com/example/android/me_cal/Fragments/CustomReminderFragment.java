@@ -132,6 +132,7 @@ public class CustomReminderFragment extends Fragment implements View.OnClickList
                         long[] millis = helperFunctions.getParsedDateTimeInMillis(
                                 startDate, mReminderDateTv.getText().toString(),
                                 startTime, setTime);
+                        Calendar calendar = Calendar.getInstance();
 
                         if (millis[0] < millis[1]) {
                             Toast.makeText(getActivity(), "REMINDER CANNOT BE AFTER START TIME", Toast.LENGTH_LONG).show();

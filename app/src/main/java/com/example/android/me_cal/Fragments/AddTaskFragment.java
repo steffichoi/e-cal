@@ -1,21 +1,16 @@
 package com.example.android.me_cal.Fragments;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.icu.text.DateFormatSymbols;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.text.format.DateFormat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +25,10 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.android.me_cal.Helper.HelperFunctions;
+import com.example.android.me_cal.NotificationUtil.AlarmReceiver;
+import com.example.android.me_cal.NotificationUtil.EventNotificationUtil;
 import com.example.android.me_cal.R;
 import com.example.android.me_cal.data.AddTaskDbHelper;
-
-import org.w3c.dom.Text;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -314,7 +309,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                 break;
 
             case R.id.cancel_fab:
-                helperFunctions.switchMainContentFragment(new CustomCalendarView(), getActivity());
+                helperFunctions.switchMainContentFragment(new CustomCalendarFragment(), getActivity());
                 helperFunctions.switchSideContentFragment(new TodaySideBarFragment(), getActivity());
                 break;
 
@@ -357,6 +352,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
                     mEventTypeSpinner.getSelectedItem().toString(),
                     mEventReminderSpinner.getSelectedItem().toString(),
                     getLongTime(mEventCustomReminderTextView.getText().toString()));
+            setAlarm(times[0]);
         }
 
     }
@@ -481,5 +477,17 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
             e.printStackTrace();
             return -1;
         }
+    }
+
+    private void setAlarm(long time) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(time);
+        AlarmManager manager = (AlarmManager) getActivity().getSystemService(getActivity().ALARM_SERVICE);
+
+        Intent myIntent = new Intent(getActivity(), AlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, myIntent, 0);
+
+        manager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+        Toast.makeText(getActivity(), "alarm set: "+ cal.getTime(), Toast.LENGTH_LONG).show();
     }
 }

@@ -10,13 +10,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.example.android.me_cal.Fragments.CustomCalendarView;
 import com.example.android.me_cal.Fragments.ShoppingFragment;
 import com.example.android.me_cal.Fragments.ToDoFragment;
 import com.example.android.me_cal.Fragments.TodayFragment;
-import com.example.android.me_cal.Fragments.TodaySideBarFragment;
 import com.example.android.me_cal.Fragments.WeekFragment;
 import com.example.android.me_cal.Helper.HelperFunctions;
 

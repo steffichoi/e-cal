@@ -34,6 +34,7 @@ public class HelperFunctions {
 
 
     public void switchMainContentFragment(Fragment fragment, Context context) {
+        Activity activity = (Activity) context;
         FragmentManager fragmentManager = activity.getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
@@ -43,6 +44,7 @@ public class HelperFunctions {
     }
 
     public void switchSideContentFragment(Fragment fragment, Context context) {
+        Activity activity = (Activity) context;
         FragmentManager fragmentManager = activity.getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
