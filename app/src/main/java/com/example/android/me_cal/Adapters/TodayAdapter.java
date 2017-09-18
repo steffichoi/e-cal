@@ -32,8 +32,6 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
     private Cursor mCursor;
     private String[] mDataset;
 
-    private String taskName;
-    private long taskTime;
 
     public TodayAdapter(Context context, Cursor cursor, String[] myDataset) {
         mContext = context;
@@ -53,22 +51,21 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
     public void onBindViewHolder(MyViewHolder holder, final int position) {
 
         if (!mCursor.moveToPosition(position)) {
-            holder.mTaskTimeTv.setText("NO EVENTS FOUND!");
             return;
         }
 
-        taskName = mCursor.getString(
+        final String taskName = mCursor.getString(
                 mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_NAME));
-        taskTime = mCursor.getLong(
+        final long taskTime = mCursor.getLong(
                 mCursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME_START));
+        final long id = mCursor.getLong(mCursor.getColumnIndex(AddTaskContract.AddTaskEntry._ID));
 
-        HelperFunctions helperFunctions = new HelperFunctions(mContext);
+        final HelperFunctions helperFunctions = new HelperFunctions(mContext);
         String time = helperFunctions.getTime(taskTime);
 
         holder.mTaskNameTv.setText(taskName);
         holder.mTaskTimeTv.setText(time);
 
-        final long id = mCursor.getLong(mCursor.getColumnIndex(AddTaskContract.AddTaskEntry._ID));
         holder.itemView.setTag(id);
 
         holder.mCardView.setOnClickListener(new View.OnClickListener() {
@@ -76,8 +73,6 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
             public void onClick(View view) {
                 String currentValue = mDataset[position];
                 Log.d("CardView", "CardView Clicked: " + currentValue);
-
-                final HelperFunctions helperFunctions = new HelperFunctions(mContext);
 
                 Fragment tdFragment = new TaskDetailFragment();
                 Bundle bundle = new Bundle();
@@ -113,8 +108,7 @@ public class TodayAdapter extends RecyclerView.Adapter<TodayAdapter.MyViewHolder
 
     @Override
     public int getItemCount() {
-        // TODO: get rid of +1(for testing purposes)
-        return mCursor.getCount()+1;
+        return mCursor.getCount();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
