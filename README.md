@@ -25,6 +25,8 @@ IMPLEMENTED
 - if editing, update db!
 - view of weekly schedule through drawer navigator
 - set reminder/alarm for reminder/notification
+- fix update reminder bug
+- create multiple alarms and notifications
 
 
 NOT IMPLEMENTED

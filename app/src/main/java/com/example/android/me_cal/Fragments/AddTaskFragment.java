@@ -5,9 +5,12 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.icu.text.DateFormatSymbols;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.text.format.DateFormat;
@@ -159,7 +162,7 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
 
         mEventReminderSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long reminderId) {
                 String reminder_choice = mEventReminderSpinner.getSelectedItem().toString();
                 if (reminder_choice.equals("Set Reminder")){
                     if (eventNotSet()) {
@@ -338,21 +341,28 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
         String time1 = mEventTimeStartTextView.getText().toString();
         String time2 = mEventTimeEndTextView.getText().toString();
         long[] times = helperFunctions.getParsedDateTimeInMillis(date1, date2, time1, time2);
+        int newAlarmId = -1;
 
         if (edit) {
             Toast.makeText(getActivity(), "updating db at " + id, Toast.LENGTH_LONG).show();
+
+            newAlarmId = setAlarm(getLongTime(mEventCustomReminderTextView.getText().toString()), dbHelper.getAlarmId(id), times[0], mEventNameEditText.getText().toString());
             dbHelper.update(mEventNameEditText.getText().toString(), date, times[0], times[1],
                     mEventLocationEditText.getText().toString(),
                     mEventTypeSpinner.getSelectedItem().toString(),
                     mEventReminderSpinner.getSelectedItem().toString(),
-                    getLongTime(mEventCustomReminderTextView.getText().toString()), id);
+                    getLongTime(mEventCustomReminderTextView.getText().toString()), newAlarmId, id);
+
         } else {
+            if (mEventReminderSpinner.getSelectedItem().toString().equals("Set Reminder")) {
+                newAlarmId = setAlarm(getLongTime(mEventCustomReminderTextView.getText().toString()), -1, times[0], mEventNameEditText.getText().toString());
+            }
+            Toast.makeText(getActivity(), "adding event " + newAlarmId, Toast.LENGTH_SHORT).show();
             dbHelper.addEvent(mEventNameEditText.getText().toString(), date, times[0], times[1],
                     mEventLocationEditText.getText().toString(),
                     mEventTypeSpinner.getSelectedItem().toString(),
                     mEventReminderSpinner.getSelectedItem().toString(),
-                    getLongTime(mEventCustomReminderTextView.getText().toString()));
-            setAlarm(times[0]);
+                    getLongTime(mEventCustomReminderTextView.getText().toString()), newAlarmId);
         }
 
     }
@@ -479,15 +489,38 @@ public class AddTaskFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private void setAlarm(long time) {
+    private int setAlarm(long time, int alarmId, long startTime, String name) {
+
+        if (alarmId != -1) {
+            Toast.makeText(getActivity(), "resetting alarm " + alarmId, Toast.LENGTH_SHORT).show();
+            AlarmManager manager = (AlarmManager) getActivity().getSystemService(getActivity().ALARM_SERVICE);
+            Intent intent = new Intent(getActivity(), AlarmReceiver.class);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), alarmId, intent, 0);
+            manager.cancel(pendingIntent);
+            pendingIntent.cancel();
+        }
+
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(time);
         AlarmManager manager = (AlarmManager) getActivity().getSystemService(getActivity().ALARM_SERVICE);
 
-        Intent myIntent = new Intent(getActivity(), AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 0, myIntent, 0);
+        Intent intent = new Intent(getActivity(), AlarmReceiver.class);
+        int newAlarmId = setAlarmId(getActivity());
+        intent.putExtra("alarm_id", newAlarmId);
+        intent.putExtra("start_time", startTime);
+        intent.putExtra("alarm_name", name);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), alarmId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         manager.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
         Toast.makeText(getActivity(), "alarm set: "+ cal.getTime(), Toast.LENGTH_LONG).show();
+        return newAlarmId;
+    }
+
+    public static int setAlarmId(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        int alarmId = preferences.getInt("ALARM", 1);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("ALARM", alarmId + 1).apply();
+        return alarmId;
     }
 }

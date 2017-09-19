@@ -19,6 +19,7 @@ public class AddTaskContract {
         public static final String COLUMN_TASK_TYPE = "taskType";
         public static final String COLUMN_TASK_REMINDER = "taskReminder";
         public static final String COLUMN_TASK_CUSTOM_REMINDER = "taskCustomReminder";
+        public static final String CUSTOM_TASK_ALARM_ID = "taskAlarmId";
 
     }
 }

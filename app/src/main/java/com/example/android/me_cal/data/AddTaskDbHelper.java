@@ -39,7 +39,8 @@ public class AddTaskDbHelper extends SQLiteOpenHelper{
                 AddTaskEntry.COLUMN_TASK_LOCATION + " TEXT DEFAULT NULL, " +
                 AddTaskEntry.COLUMN_TASK_TYPE + " TEXT NOT NULL, " +
                 AddTaskEntry.COLUMN_TASK_REMINDER + " TEXT NOT NULL, " +
-                AddTaskEntry.COLUMN_TASK_CUSTOM_REMINDER + " INT NOT NULL" +
+                AddTaskEntry.COLUMN_TASK_CUSTOM_REMINDER + " INT NOT NULL, " +
+                AddTaskEntry.CUSTOM_TASK_ALARM_ID + " INT NOT NULL" +
                 "); ";
 
         db.execSQL(SQL_CREATE_WAITLIST_TABLE);
@@ -90,7 +91,7 @@ public class AddTaskDbHelper extends SQLiteOpenHelper{
     }
 
     public long addEvent(String name, long date, long timeStart, long timeEnd,
-                         String location, String type, String reminder, long customReminder) {
+                         String location, String type, String reminder, long customReminder, int alarmID) {
         SQLiteDatabase mDb = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -102,12 +103,13 @@ public class AddTaskDbHelper extends SQLiteOpenHelper{
         cv.put(AddTaskEntry.COLUMN_TASK_TYPE, type);
         cv.put(AddTaskEntry.COLUMN_TASK_REMINDER, reminder);
         cv.put(AddTaskEntry.COLUMN_TASK_CUSTOM_REMINDER, customReminder);
+        cv.put(AddTaskEntry.CUSTOM_TASK_ALARM_ID, alarmID);
 
         return mDb.insert(AddTaskEntry.TABLE_NAME, null, cv);
     }
 
     public void update (String name, long date, long timeStart, long timeEnd,
-                        String location, String type, String reminder, long customReminder, long id) {
+                        String location, String type, String reminder, long customReminder, int alarmID, long id) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues cv = new ContentValues();
 
@@ -119,6 +121,7 @@ public class AddTaskDbHelper extends SQLiteOpenHelper{
         cv.put(AddTaskEntry.COLUMN_TASK_TYPE, type);
         cv.put(AddTaskEntry.COLUMN_TASK_REMINDER, reminder);
         cv.put(AddTaskEntry.COLUMN_TASK_CUSTOM_REMINDER, customReminder);
+        cv.put(AddTaskEntry.CUSTOM_TASK_ALARM_ID, alarmID);
 
         db.update(AddTaskEntry.TABLE_NAME, cv, AddTaskEntry._ID + "=" + id, null);
     }
@@ -127,5 +130,16 @@ public class AddTaskDbHelper extends SQLiteOpenHelper{
         SQLiteDatabase mDb = this.getWritableDatabase();
         return mDb.delete(AddTaskEntry.TABLE_NAME,
                 AddTaskEntry._ID + "=" + id, null) > 0;
+    }
+
+    public int getAlarmId(long id) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + AddTaskEntry.TABLE_NAME + " WHERE "
+                + AddTaskEntry._ID + "='" + id + "'";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor != null) cursor.moveToFirst();
+        return cursor.getInt(cursor.getColumnIndex(AddTaskEntry.CUSTOM_TASK_ALARM_ID));
     }
 }

@@ -328,6 +328,7 @@ public class DatabaseTest {
         testValues.put(AddTaskContract.AddTaskEntry.COLUMN_TASK_TYPE, "Event");
         testValues.put(AddTaskContract.AddTaskEntry.COLUMN_TASK_REMINDER, "Custom");
         testValues.put(AddTaskContract.AddTaskEntry.COLUMN_TASK_CUSTOM_REMINDER, timesR[0]);
+        testValues.put(AddTaskContract.AddTaskEntry.CUSTOM_TASK_ALARM_ID, -1);
         return testValues;
     }
 }

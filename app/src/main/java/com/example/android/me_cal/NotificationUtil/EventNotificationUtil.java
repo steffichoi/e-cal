@@ -23,31 +23,31 @@ import com.example.android.me_cal.R;
 public class EventNotificationUtil {
     private static final int EVENT_NOTIFICATION_PENDING_INTENT_ID = 1234;
 
-    public static void eventReminder(Context context) {
+    public static void eventReminder(Context context, int alarmId, long startTime, String name) {
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context)
                 .setColor(ContextCompat.getColor(context, R.color.colorPrimary))
                 .setSmallIcon(R.drawable.ic_access_alarm_blue_24dp)
                 .setLargeIcon(largeIcon(context))
                 .setContentTitle("Event Reminder")
-                .setSubText("event coming up!")
+                .setSubText(name + " coming up!")
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText("event coming up!"))
+                        .bigText(name + " coming up!"))
                 .setDefaults(Notification.DEFAULT_VIBRATE)
-                .setContentIntent(contentIntent(context))
-//                .setWhen(time)
+                .setContentIntent(contentIntent(context, alarmId))
+                .setWhen(startTime)
                 .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(EVENT_NOTIFICATION_PENDING_INTENT_ID, notificationBuilder.build());
+        notificationManager.notify(alarmId, notificationBuilder.build());
         Toast.makeText(context, "nofication reminder set!", Toast.LENGTH_SHORT).show();
     }
 
-    private static PendingIntent contentIntent(Context context) {
+    private static PendingIntent contentIntent(Context context, int alarmId) {
 
         Intent startActivityIntent = new Intent(context, MainActivity.class);
-        return PendingIntent.getActivity(context, EVENT_NOTIFICATION_PENDING_INTENT_ID,
+        return PendingIntent.getActivity(context, alarmId,
                 startActivityIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
