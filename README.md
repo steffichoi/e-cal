@@ -27,6 +27,7 @@ IMPLEMENTED
 - set reminder/alarm for reminder/notification
 - fix update reminder bug
 - create multiple alarms and notifications
+- view of activity details when one item in weekly schedule is clicked
 
 
 NOT IMPLEMENTED
@@ -34,7 +35,6 @@ NOT IMPLEMENTED
 - to do list in side bar showing to do items for this date
 ->// add task button present? or click on time slot?
 
-- view of activity details when one item in weekly schedule is clicked
 - can navigate to next week through drop down menu as header
 - navigate to daily view when date column clicked on
 ->// add task button present? or click on time slot? (liking time slot idea more,  but need to implement time slots)

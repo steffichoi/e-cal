@@ -1,36 +1,33 @@
 package com.example.android.me_cal.Adapters;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.me_cal.Fragments.TaskDetailFragment;
-import com.example.android.me_cal.Fragments.TodaySideBarFragment;
 import com.example.android.me_cal.Helper.HelperFunctions;
-import com.example.android.me_cal.data.AddTaskContract;
+import com.example.android.me_cal.MainActivity;
 import com.example.android.me_cal.R;
+import com.example.android.me_cal.data.AddTaskContract;
 
 /**
  * Created by steffichoi on 8/23/17.
  */
 
-public class TodaySideBarAdapter extends
-        RecyclerView.Adapter<TodaySideBarAdapter.ScheduleViewHolder> {
+public class WeekAdapter extends
+        RecyclerView.Adapter<WeekAdapter.ScheduleViewHolder> {
 
     private Context mContext;
     private Cursor mCursor;
 
-    public TodaySideBarAdapter(Context context, Cursor cursor) {
+    public WeekAdapter(Context context, Cursor cursor) {
         mContext = context;
         mCursor = cursor;
     }
@@ -38,7 +35,7 @@ public class TodaySideBarAdapter extends
     @Override
     public ScheduleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view= LayoutInflater.from(mContext)
-                .inflate(R.layout.today_side_bar_item, parent, false);
+                .inflate(R.layout.week_day_item, parent, false);
         return new ScheduleViewHolder(view);
     }
 
@@ -64,15 +61,14 @@ public class TodaySideBarAdapter extends
             @Override
             public void onClick(View view) {
 
-                Fragment taskDetailFragment = new TaskDetailFragment();
-                Bundle bundle = new Bundle();
+                Intent intent = new Intent(mContext, MainActivity.class);
 
-                bundle.putString("task_name", taskName);
-                bundle.putLong("task_time", taskTime);
-                bundle.putLong("task_id", id);
-                taskDetailFragment.setArguments(bundle);
+                intent.putExtra("to_detail", true);
+                intent.putExtra("task_name", taskName);
+                intent.putExtra("task_time", taskTime);
+                intent.putExtra("task_id", id);
 
-                helperFunctions.switchMainContentFragment(taskDetailFragment, mContext);
+                mContext.startActivity(intent);
             }
         });
     }
@@ -90,8 +86,8 @@ public class TodaySideBarAdapter extends
         public ScheduleViewHolder(View itemView) {
             super(itemView);
 
-            taskTimeTextView = (TextView) itemView.findViewById(R.id.today_task_time_tv);
-            taskNameTextView = (TextView) itemView.findViewById(R.id.today_task_name_tv);
+            taskTimeTextView = (TextView) itemView.findViewById(R.id.week_task_time_tv);
+            taskNameTextView = (TextView) itemView.findViewById(R.id.week_task_name_tv);
         }
     }
 }

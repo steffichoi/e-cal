@@ -27,7 +27,6 @@ public class TodaySideBarFragment extends Fragment {
     View myView;
 
     private TodaySideBarAdapter mAdapter;
-    private SQLiteDatabase mDb;
 
     HelperFunctionsFragment helperFunctions = new HelperFunctionsFragment(getActivity(), this);
 
@@ -49,7 +48,6 @@ public class TodaySideBarFragment extends Fragment {
 
         //ADAPTER STUFF
         AddTaskDbHelper dbHelper = new AddTaskDbHelper(getActivity());
-        mDb = dbHelper.getWritableDatabase();
 
         int[] todayDate = helperFunctions.getDateIntArray();
         final String dateQuery = Integer.toString(todayDate[0]) + " " +

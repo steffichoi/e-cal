@@ -1,7 +1,9 @@
 package com.example.android.me_cal;
 
+import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.IntegerRes;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,10 +12,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.android.me_cal.Fragments.ShoppingFragment;
 import com.example.android.me_cal.Fragments.ToDoFragment;
 import com.example.android.me_cal.Fragments.TodayFragment;
+import com.example.android.me_cal.Fragments.TodaySideBarFragment;
 import com.example.android.me_cal.Fragments.WeekFragment;
 import com.example.android.me_cal.Helper.HelperFunctions;
 
@@ -29,15 +33,16 @@ public class WeekActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_week);
         setSupportActionBar(toolbar);
 
-        //Generate the calendar view as a fragment so it will be interchangable with
-        //other fragments associated with the navigation actions
-        helperFunctions.switchFragment(R.id.d1_content_frame, new WeekFragment(), this);
-        helperFunctions.switchFragment(R.id.d2_content_frame, new WeekFragment(), this);
-        helperFunctions.switchFragment(R.id.d3_content_frame, new WeekFragment(), this);
-        helperFunctions.switchFragment(R.id.d4_content_frame, new WeekFragment(), this);
-        helperFunctions.switchFragment(R.id.d5_content_frame, new WeekFragment(), this);
-        helperFunctions.switchFragment(R.id.d6_content_frame, new WeekFragment(), this);
-        helperFunctions.switchFragment(R.id.d7_content_frame, new WeekFragment(), this);
+        Intent intent = getIntent();
+        int[] dateArray = intent.getIntArrayExtra("date_picked");
+
+        Fragment[] weekFrags = getWeekFragments(dateArray[0], dateArray[1], dateArray[2]);
+        int[] contentIds = {R.id.d1_content_frame, R.id.d2_content_frame, R.id.d3_content_frame,
+                R.id.d4_content_frame, R.id.d5_content_frame, R.id.d6_content_frame, R.id.d7_content_frame};
+
+        for (int i=0; i<7; i++) {
+            helperFunctions.switchFragment(contentIds[i], weekFrags[i], this);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_week_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -112,5 +117,23 @@ public class WeekActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_week_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private Fragment[] getWeekFragments(int date, int month, int year) {
+        Fragment[] weekFrags = new Fragment[7];
+
+        for (int i=0; i<7; i++) {
+            Fragment weekDayFrag = new WeekFragment();
+            Bundle bundle = new Bundle();
+
+            bundle.putInt("date_from_cal", date);
+            bundle.putInt("month_from_cal", month);
+            bundle.putInt("year_from_cal", year);
+
+            weekDayFrag.setArguments(bundle);
+            weekFrags[i] = weekDayFrag;
+            date++;
+        }
+        return weekFrags;
     }
 }

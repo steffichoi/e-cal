@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -174,5 +175,15 @@ public class HelperFunctions {
             Toast.makeText(context, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!",
                     Toast.LENGTH_LONG);
         }
+    }
+
+    public int[] getCurrDateIntArray() {
+        Calendar now = Calendar.getInstance();
+        int month = now.get(Calendar.MONTH);
+        int day = now.get(Calendar.DAY_OF_MONTH);
+        int year = now.get(Calendar.YEAR);
+
+        int[] monthDate = {day, month, year};
+        return monthDate;
     }
 }

@@ -1,6 +1,9 @@
 package com.example.android.me_cal;
 
+import android.app.Fragment;
 import android.content.Intent;
+import android.database.Cursor;
+import android.icu.text.DateFormatSymbols;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,14 +14,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CalendarView;
+import android.widget.Toast;
 
 import com.example.android.me_cal.Fragments.CustomCalendarFragment;
 import com.example.android.me_cal.Fragments.ShoppingFragment;
+import com.example.android.me_cal.Fragments.TaskDetailFragment;
 import com.example.android.me_cal.Fragments.ToDoFragment;
 import com.example.android.me_cal.Fragments.TodayFragment;
 import com.example.android.me_cal.Fragments.TodaySideBarFragment;
 import com.example.android.me_cal.Helper.HelperFunctions;
 import com.example.android.me_cal.NotificationUtil.*;
+import com.example.android.me_cal.data.AddTaskContract;
+import com.example.android.me_cal.data.AddTaskDbHelper;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -32,10 +40,40 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        Intent intent = getIntent();
+        boolean detail = intent.getBooleanExtra("to_detail", false);
+
         //Generate the calendar view as a fragment so it will be interchangable with
         //other fragments associated with the navigation actions
-        helperFunctions.switchMainContentFragment(new CustomCalendarFragment(), this);
-        helperFunctions.switchSideContentFragment(new TodaySideBarFragment(), this);
+        if (detail) {
+            Fragment taskDetailFragment = new TaskDetailFragment();
+            Bundle bundle = new Bundle();
+
+            bundle.putString("task_name", intent.getStringExtra("task_name"));
+            bundle.putLong("task_time", intent.getLongExtra("task_time", -1));
+            bundle.putLong("task_id", intent.getLongExtra("task_id", -1));
+            taskDetailFragment.setArguments(bundle);
+
+            helperFunctions.switchMainContentFragment(taskDetailFragment, this);
+
+            AddTaskDbHelper dbHelper = new AddTaskDbHelper(this);
+            Cursor cursor = dbHelper.getTask(intent.getLongExtra("task_time", -1));
+            long startTimeFromDb = cursor.getLong(cursor.getColumnIndex(AddTaskContract.AddTaskEntry.COLUMN_TASK_TIME_START));
+            String[] start = helperFunctions.getDateTime(startTimeFromDb).split("\\s+");
+
+            Fragment todaySideBarFragment = new TodaySideBarFragment();
+            bundle.putInt("date_from_cal", Integer.parseInt(start[1]));
+            bundle.putInt("month_from_cal", helperFunctions.getMonthInt(start[2]));
+            bundle.putInt("year_from_cal", Integer.parseInt(start[3]));
+
+            todaySideBarFragment.setArguments(bundle);
+            helperFunctions.switchSideContentFragment(todaySideBarFragment, this);
+
+        } else {
+            helperFunctions.switchMainContentFragment(new CustomCalendarFragment(), this);
+            helperFunctions.switchSideContentFragment(new TodaySideBarFragment(), this);
+        }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -89,9 +127,25 @@ public class MainActivity extends AppCompatActivity
             helperFunctions.switchMainContentFragment(new TodayFragment(), this);
             helperFunctions.switchSideContentFragment(new ToDoFragment(), this);
         } else if (id == R.id.nav_week) {
-            Intent intent = new Intent(this, WeekActivity.class);
-//            intent.putExtra(EXTRA_MESSAGE, message);
+
+            final Intent intent = new Intent(this, WeekActivity.class);
+            Fragment currentFrag = getFragmentManager().findFragmentById(R.id.main_content_frame);
+            int[] date = helperFunctions.getCurrDateIntArray();
+            if (currentFrag instanceof CustomCalendarFragment) {
+                // get the date and add it to intent extra
+                date = ((CustomCalendarFragment) currentFrag).getDatePicked();
+
+                Toast.makeText(this, "curr frag is customcal!!, " + date[0] + " " + date[1] + " " + date[2], Toast.LENGTH_LONG).show();
+
+            } else if (currentFrag instanceof TodayFragment) {
+                date = ((TodayFragment) currentFrag).getDatePicked();
+                Toast.makeText(this, "curr frag is TODAY!!" + date, Toast.LENGTH_SHORT).show();
+                // get the date and add it to intent extra
+
+            }
+            intent.putExtra("date_picked", date);
             startActivity(intent);
+
         } else if (id == R.id.nav_month) {
             helperFunctions.switchMainContentFragment(new CustomCalendarFragment(), this);
             helperFunctions.switchSideContentFragment(new TodaySideBarFragment(), this);

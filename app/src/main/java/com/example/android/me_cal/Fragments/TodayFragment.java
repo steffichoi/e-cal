@@ -102,4 +102,17 @@ public class TodayFragment extends Fragment {
 
         return myView;
     }
+
+    public int[] getDatePicked() {
+
+        int[] monthDate = helperFunctions.getDateIntArray();
+
+        Bundle bundle = this.getArguments();
+        if (bundle != null) {
+            monthDate[0] = bundle.getInt("date_from_cal", 01);
+            monthDate[1]= bundle.getInt("month_from_cal", 01);
+            monthDate[2] = bundle.getInt("year_from_cal", 01);
+        }
+        return monthDate;
+    }
 }

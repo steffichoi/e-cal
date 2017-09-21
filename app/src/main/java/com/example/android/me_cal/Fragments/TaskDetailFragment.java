@@ -35,7 +35,6 @@ import org.w3c.dom.Text;
 public class TaskDetailFragment extends Fragment implements View.OnClickListener{
 
     View myView;
-    private SQLiteDatabase mDb;
 
     TextView taskNameTv;
     TextView taskStartDateTv;
@@ -68,8 +67,6 @@ public class TaskDetailFragment extends Fragment implements View.OnClickListener
         }
 
         AddTaskDbHelper dbHelper = new AddTaskDbHelper(getActivity());
-        mDb = dbHelper.getWritableDatabase();
-
         Cursor cursor = dbHelper.getTask(taskTime);
 
         getViews();
