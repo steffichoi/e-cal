@@ -1,6 +1,7 @@
 package com.example.android.me_cal.Fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.database.Cursor;
 import android.icu.text.DateFormatSymbols;
 import android.os.Bundle;
@@ -10,10 +11,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.android.me_cal.Adapters.TodaySideBarAdapter;
 import com.example.android.me_cal.Adapters.WeekAdapter;
 import com.example.android.me_cal.Helper.HelperFunctionsFragment;
+import com.example.android.me_cal.MainActivity;
 import com.example.android.me_cal.R;
 import com.example.android.me_cal.data.AddTaskDbHelper;
 
@@ -21,9 +24,11 @@ import com.example.android.me_cal.data.AddTaskDbHelper;
  * Created by steffichoi on 8/17/17.
  */
 
-public class WeekFragment extends Fragment {
+public class WeekFragment extends Fragment implements View.OnClickListener {
 
     View myView;
+
+    int[] todayDate;
 
     HelperFunctionsFragment helperFunctions = new HelperFunctionsFragment(getActivity(), this);
 
@@ -43,7 +48,7 @@ public class WeekFragment extends Fragment {
         WeekAdapter mAdapter;
         AddTaskDbHelper dbHelper = new AddTaskDbHelper(getActivity());
 
-        int[] todayDate = helperFunctions.getDateIntArray();
+        todayDate = helperFunctions.getDateIntArray();
         final String dateQuery = Integer.toString(todayDate[0]) + " " +
                 new DateFormatSymbols().getMonths()[todayDate[1]] + " " + Integer.toString(todayDate[2]);
         long longDate = helperFunctions.getLongDate(dateQuery);
@@ -53,6 +58,27 @@ public class WeekFragment extends Fragment {
 
         schedulerRecyclerView.setAdapter(mAdapter);
 
+        TextView dayTv = (TextView) myView.findViewById(R.id.week_day_tv);
+        TextView dateTv = (TextView) myView.findViewById(R.id.week_date_tv);
+
+        dayTv.setOnClickListener(this);
+        dateTv.setOnClickListener(this);
+
         return myView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v.getId() == R.id.week_date_tv || v.getId() == R.id.week_day_tv) {
+
+            Intent intent = new Intent(getActivity(), MainActivity.class);
+
+            intent.putExtra("to_today", true);
+            intent.putExtra("date_from_cal", todayDate[0]);
+            intent.putExtra("month_from_cal", todayDate[1]);
+            intent.putExtra("year_from_cal", todayDate[2]);
+
+            getActivity().startActivity(intent);
+        }
     }
 }

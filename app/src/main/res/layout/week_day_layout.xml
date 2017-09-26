@@ -15,7 +15,8 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="Day"
-        android:textSize="14sp"
+        android:textSize="16sp"
+        android:textStyle="bold"
         android:textColor="@color/white"
         />
 
@@ -24,6 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
         android:text="DT"
         android:textColor="@color/white"
         android:textSize="16sp"
@@ -31,7 +33,7 @@
 
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/today_recycler_view"
+        android:id="@+id/week_day_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />

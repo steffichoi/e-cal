@@ -28,6 +28,8 @@ IMPLEMENTED
 - fix update reminder bug
 - create multiple alarms and notifications
 - view of activity details when one item in weekly schedule is clicked
+- navigate to daily view when date column clicked on
+- can navigate to next week through drop down calendar widget as header
 
 
 NOT IMPLEMENTED
@@ -35,8 +37,6 @@ NOT IMPLEMENTED
 - to do list in side bar showing to do items for this date
 ->// add task button present? or click on time slot?
 
-- can navigate to next week through drop down menu as header
-- navigate to daily view when date column clicked on
 ->// add task button present? or click on time slot? (liking time slot idea more,  but need to implement time slots)
 
 - view of monthly schedule through drawer navigator
@@ -69,6 +69,7 @@ NEED TO DO
 
 BUGSS!!!
 - add task time. needs to be 24 hr...? or something on that page is broken
+- drop down in week view
 
 REQUEST:
 (enrico)

@@ -5,7 +5,9 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:padding="@dimen/activity_horizontal_margin"
+    android:paddingTop="16dp"
+    android:paddingStart="4dp"
+    android:paddingEnd="4dp"
     tools:context="com.example.android.me_cal.MainActivity">
 
 

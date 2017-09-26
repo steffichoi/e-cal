@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity
 
         Intent intent = getIntent();
         boolean detail = intent.getBooleanExtra("to_detail", false);
+        boolean today = intent.getBooleanExtra("to_today", false);
 
         //Generate the calendar view as a fragment so it will be interchangable with
         //other fragments associated with the navigation actions
@@ -68,6 +69,18 @@ public class MainActivity extends AppCompatActivity
 
             todaySideBarFragment.setArguments(bundle);
             helperFunctions.switchSideContentFragment(todaySideBarFragment, this);
+
+        } else if (today) {
+          Fragment todayFragment = new TodayFragment();
+            Bundle bundle = new Bundle();
+
+            bundle.putInt("date_from_cal", intent.getIntExtra("date_from_cal", 0));
+            bundle.putInt("month_from_cal", intent.getIntExtra("month_from_cal", 0));
+            bundle.putInt("year_from_cal", intent.getIntExtra("year_from_cal", 0));
+
+            todayFragment.setArguments(bundle);
+            helperFunctions.switchMainContentFragment(todayFragment, this);
+            helperFunctions.switchSideContentFragment(new ToDoFragment(), this);
 
         } else {
             helperFunctions.switchMainContentFragment(new CustomCalendarFragment(), this);
